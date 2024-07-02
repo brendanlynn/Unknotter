@@ -32,5 +32,13 @@ namespace Unknotter {
                 return TotalSize - index1 + index2;
             }
         }
+        //Computes the equivilance or lack of such of two AbsLength instances.
+        constexpr __forceinline bool operator==(AbsLength Other) const {
+            return index1 == Other.index1 && index2 == Other.index2;
+        }
+        //Computes the equivilance or lack of such of two AbsLength instances.
+        constexpr __forceinline bool operator!=(AbsLength Other) const {
+            return index1 != Other.index1 || index2 != Other.index2;
+        }
     };
 }
