@@ -23,5 +23,14 @@ namespace Unknotter {
         constexpr inline AbsLength Inverse() const {
             return AbsLength(index2, index1);
         }
+        //Computes the amount of indicies in the range.
+        constexpr inline size_t RangeSize(size_t TotalSize) const {
+            if (index1 <= index2) {
+                return index2 - index1;
+            }
+            else {
+                return TotalSize - index1 + index2;
+            }
+        }
     };
 }
