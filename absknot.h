@@ -20,11 +20,11 @@ namespace Unknotter {
         //Removes the crossovers indicated by the indicies. The function assumes that all nodes in the list also have their corresponding node in the list. If this assumption is false, the behavior of the function is undefined, and may corrupt the class.
         void RemoveAtFull(size_t* Indicies, size_t IndexCount);
         //The number of crossovers. The number of nodes is always twice the number of crossovers.
-        inline size_t CrossoverCount() const {
+        __forceinline size_t CrossoverCount() const {
             return crosses.size() >> 1;
         }
         //Returns the crossover node at the given index.
-        inline AbsCross& operator[](size_t Index) {
+        __forceinline AbsCross& operator[](size_t Index) {
             return crosses[Index];
         }
     };
