@@ -18,9 +18,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="absknot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="linkedknot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="absknot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
