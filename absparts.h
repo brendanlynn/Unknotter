@@ -3,9 +3,9 @@
 namespace Unknotter {
     //A length of consecutive crossovers.
     struct AbsLength final {
-        //The inclusive lower bound of the range. If Index1 > Index2, the range will wrap around.
+        //The inclusive lower bound of the range. If index1 > index2, the range will wrap around.
         size_t index1;
-        //The exclusive upper bound of the range. If Index1 > Index2, the range will wrap around.
+        //The exclusive upper bound of the range. If index1 > index2, the range will wrap around.
         size_t index2;
         //Initializes an AbsLength instance.
         constexpr inline AbsLength(size_t Index1, size_t Index2)
