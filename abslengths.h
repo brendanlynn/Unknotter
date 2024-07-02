@@ -12,7 +12,7 @@ namespace Unknotter {
             : index1(Index1), index2(Index2) { }
         //Returns true if a given index is within the range, false otherwise.
         constexpr inline bool InRange(size_t Index) const {
-            if (index1 < index2) {
+            if (index1 <= index2) {
                 return (Index >= index1 && Index < index2);
             }
             else {
