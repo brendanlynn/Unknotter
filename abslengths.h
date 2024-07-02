@@ -19,6 +19,7 @@ namespace Unknotter {
                 return (Index >= index1 || Index < index2);
             }
         }
+        //Reverses the range, such that points that were considered inside are now considered outside, and vice versa.
         constexpr inline AbsLength Inverse() const {
             return AbsLength(index2, index1);
         }
