@@ -29,5 +29,8 @@
     <ClInclude Include="absknot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="absparts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
