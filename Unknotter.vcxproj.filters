@@ -29,7 +29,7 @@
     <ClInclude Include="absknot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="absparts.h">
+    <ClInclude Include="abslengths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
