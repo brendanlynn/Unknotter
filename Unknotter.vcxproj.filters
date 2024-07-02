@@ -32,5 +32,8 @@
     <ClInclude Include="abslengths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="abscircle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

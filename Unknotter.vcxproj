@@ -131,6 +131,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="abscircle.h" />
     <ClInclude Include="absknot.h" />
     <ClInclude Include="abslengths.h" />
     <ClInclude Include="linkedknot.h" />
