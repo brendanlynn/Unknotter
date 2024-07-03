@@ -128,12 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="absknot.cpp" />
+    <ClCompile Include="abssimplifier.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="abscircle.h" />
     <ClInclude Include="absknot.h" />
     <ClInclude Include="abslengths.h" />
+    <ClInclude Include="abssimplifier.h" />
     <ClInclude Include="linkedknot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
