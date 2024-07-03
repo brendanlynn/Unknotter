@@ -15,7 +15,7 @@ namespace Unknotter {
               l2(Knot[Index1].crossingIndex, Knot[Index2].crossingIndex) { }
         constexpr __forceinline AbsCircle(AbsLength Length, AbsKnot& Knot)
             : AbsCircle(Length.index1, Length.index2, Knot) { }
-        constexpr __forceinline bool OnCircle(size_t Index) {
+        constexpr __forceinline bool OnCircle(size_t Index) const {
             return l1.InRange(Index) || l2.InRange(Index);
         }
     };

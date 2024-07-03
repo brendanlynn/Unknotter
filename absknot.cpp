@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-void subtractByList(size_t& Index, size_t* Array, size_t Length) {
+void subtractByList(size_t& Index, const size_t* Array, size_t Length) {
     size_t lwr = 0;
     size_t upr = Length;
     while (upr - lwr > 1) {
@@ -23,7 +23,7 @@ void Unknotter::AbsKnot::RemoveAt(size_t Index) {
     indicies[1] = crosses[Index].crossingIndex;
     RemoveAtFull(indicies, 2);
 }
-void Unknotter::AbsKnot::RemoveAt(size_t* Indicies, size_t IndexCount) {
+void Unknotter::AbsKnot::RemoveAt(const size_t* Indicies, size_t IndexCount) {
     std::vector<size_t> arr(IndexCount);
     memcpy(arr.data(), Indicies, IndexCount * sizeof(size_t));
     std::sort(arr.data(), arr.data() + IndexCount); //ascending
@@ -35,7 +35,7 @@ void Unknotter::AbsKnot::RemoveAt(size_t* Indicies, size_t IndexCount) {
     }
     RemoveAtFull(arr.data(), arr.size());
 }
-void Unknotter::AbsKnot::RemoveAtFull(size_t* Indicies, size_t IndexCount) {
+void Unknotter::AbsKnot::RemoveAtFull(const size_t* Indicies, size_t IndexCount) {
     if (!IndexCount) {
         return;
     }

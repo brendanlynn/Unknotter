@@ -41,12 +41,12 @@ namespace Unknotter {
             }
         }
     private:
-        static __forceinline void GoToRef(LinkedCross*& Current, bool& Over, const LinkedCrossReference& Ref) {
+        static __forceinline void GoToRef(const LinkedCross*& Current, bool& Over, const LinkedCrossReference& Ref) {
             Current = Ref.r;
             Over = Ref.over;
         }
     public:
-        static __forceinline void TravelN(LinkedCross*& Current, bool& Over) {
+        static __forceinline void TravelN(const LinkedCross*& Current, bool& Over) {
             if (Over) {
                 GoToRef(Current, Over, Current->u_n);
             }
@@ -54,7 +54,7 @@ namespace Unknotter {
                 GoToRef(Current, Over, Current->l_n);
             }
         }
-        static __forceinline void TravelP(LinkedCross*& Current, bool& Over) {
+        static __forceinline void TravelP(const LinkedCross*& Current, bool& Over) {
             if (Over) {
                 GoToRef(Current, Over, Current->u_p);
             }
