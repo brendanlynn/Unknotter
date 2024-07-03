@@ -27,5 +27,9 @@ namespace Unknotter {
         __forceinline AbsCross& operator[](size_t Index) {
             return crosses[Index];
         }
+        //Returns the crossover node at the given index.
+        __forceinline const AbsCross& operator[](size_t Index) const {
+            return crosses[Index];
+        }
     };
 }

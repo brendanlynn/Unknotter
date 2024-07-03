@@ -48,10 +48,10 @@ __forceinline size_t binarySearchAbsChords(const std::vector<AbsChord>& AbsChord
 __forceinline bool areAbsChordsDetatched(const Unknotter::AbsKnot& Knot, const std::vector<AbsChord>& AbsChords) {
     for (const AbsChord& chord : AbsChords) {
         for (size_t i = chord.length.index1 + 1; i < chord.length.index2; ++i) {
-            size_t j = binarySearchAbsChords(AbsChords, Knot.crosses[i].crossingIndex);
+            size_t j = binarySearchAbsChords(AbsChords, Knot[i].crossingIndex);
             bool meOver = chord.over;
             bool otherOver = AbsChords[j].over;
-            bool meOverOther = Knot.crosses[i].over;
+            bool meOverOther = Knot[i].over;
             if (meOver != meOverOther && meOver != otherOver) {
                 return false;
             }
@@ -61,7 +61,7 @@ __forceinline bool areAbsChordsDetatched(const Unknotter::AbsKnot& Knot, const s
 }
 
 bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndIndex) {
-    size_t otherIndex = Knot.crosses[StartEndIndex].crossingIndex;
+    size_t otherIndex = Knot[StartEndIndex].crossingIndex;
     AbsLength range(StartEndIndex, otherIndex);
     std::vector<AbsChord> absChords;
     {
@@ -70,7 +70,7 @@ bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndInde
         size_t inCircleSince;
         bool wentOver;
         do {
-            const AbsCross& cross = Knot.crosses[i];
+            const AbsCross& cross = Knot[i];
             size_t j = cross.crossingIndex;
             if (range.InRange(j)) {
                 if (inCircle) {
@@ -106,7 +106,7 @@ bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Ci
         size_t inCircleSince;
         bool wentOver;
         do {
-            const AbsCross& cross = Knot.crosses[i];
+            const AbsCross& cross = Knot[i];
             size_t j = cross.crossingIndex;
             if (Circle.OnCircle(j)) {
                 if (inCircle) {
