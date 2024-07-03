@@ -62,7 +62,16 @@ void Unknotter::AbsKnot::RemoveAtFull(const size_t* Indicies, size_t IndexCount)
     removePresorted(*this, arr.data(), IndexCount);
 }
 
+void Unknotter::AbsKnot::RemoveRange(AbsLength Range) {
+    RemoveRange(Range.index1, Range.index2);
+}
+
 void Unknotter::AbsKnot::RemoveRange(size_t LowerIndex, size_t UpperIndex) {
+    if (LowerIndex > UpperIndex) {
+        //optimize
+        RemoveRange(LowerIndex, crosses.size());
+        RemoveRange(0, UpperIndex);
+    }
     //run benchmarks
 #if false
     std::set<size_t> otherElements;
