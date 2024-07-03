@@ -129,3 +129,11 @@ bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Ci
     std::sort(absChords.data(), absChords.data() + absChords.size(), absChordSortPredicate);
     return areAbsChordsDetatched(Knot, absChords);
 }
+
+bool Unknotter::TryToRemoveImmediately(AbsKnot& Knot, size_t StartEndIndex) {
+    if (CanBeRemovedImmediately(Knot, StartEndIndex)) {
+        Knot.RemoveRange(StartEndIndex, Knot[StartEndIndex].crossingIndex);
+        return true;
+    }
+    return false;
+}
