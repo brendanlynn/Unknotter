@@ -72,47 +72,6 @@ void Unknotter::AbsKnot::RemoveRange(size_t LowerIndex, size_t UpperIndex) {
         RemoveRange(LowerIndex, crosses.size());
         RemoveRange(0, UpperIndex);
     }
-    //run benchmarks
-#if false
-    std::set<size_t> otherElements;
-    for (size_t i = LowerIndex; i < UpperIndex; ++i) {
-        size_t idx = crosses[i].crossingIndex;
-        if (idx < LowerIndex || idx >= UpperIndex) {
-            otherElements.insert(idx);
-        }
-    }
-    size_t diff = UpperIndex - LowerIndex;
-    size_t* arr = new size_t[diff + otherElements.size()];
-    size_t* arr2 = arr;
-    bool dropped = false;
-    for (size_t v : otherElements) {
-        if (dropped || v < LowerIndex) {
-            *(arr2++) = v;
-        }
-        else {
-            size_t* arr3 = arr2 + diff;
-            std::iota(arr2, arr3, LowerIndex);
-            arr2 = arr3;
-            dropped = true;
-        }
-    }
-    removePresorted(*this, arr, arr2 - arr);
-    delete[] arr;
-#elif false
-    size_t diff = UpperIndex - LowerIndex;
-    size_t* arr = new size_t[diff << 1];
-    size_t* arr2 = arr + diff;
-    std::iota(arr, arr2, LowerIndex);
-    for (size_t i = LowerIndex; i < UpperIndex; ++i) {
-        size_t idx = crosses[i].crossingIndex;
-        if (idx < LowerIndex || idx >= UpperIndex) {
-            *(arr2++) = idx;
-        }
-    }
-    std::sort(arr, arr2);
-    removePresorted(*this, arr, arr2 - arr);
-    delete[] arr;
-#else
     size_t diff = UpperIndex - LowerIndex;
     size_t* arr = new size_t[diff << 1];
     size_t* arr2 = arr + diff;
@@ -153,5 +112,4 @@ void Unknotter::AbsKnot::RemoveRange(size_t LowerIndex, size_t UpperIndex) {
     removePresorted(*this, arr4, finalLength);
     delete[] arr;
     delete[] arr4;
-#endif
 }
