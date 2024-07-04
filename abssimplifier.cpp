@@ -171,13 +171,17 @@ bool getChordsConditionally(const AbsKnot& Knot, const AbsCircle& Circle, std::v
 bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndIndex) {
     std::vector<AbsChord>* p_absChords;
     getChordsConditionally(Knot, StartEndIndex, p_absChords);
-    return areAbsChordsDetatched(Knot, *p_absChords);
+    bool r = areAbsChordsDetatched(Knot, *p_absChords);
+    delete p_absChords;
+    return r;
 }
 
 bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Circle) {
     std::vector<AbsChord>* p_absChords;
     getChordsConditionally(Knot, Circle, p_absChords);
-    return areAbsChordsDetatched(Knot, *p_absChords);
+    bool r = areAbsChordsDetatched(Knot, *p_absChords);
+    delete p_absChords;
+    return r;
 }
 
 bool Unknotter::TryToRemoveImmediately(AbsKnot& Knot, size_t StartEndIndex) {
