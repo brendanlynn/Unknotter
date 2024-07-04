@@ -165,7 +165,8 @@ bool getChordsConditionally(const AbsKnot& Knot, const AbsCircle& Circle, std::v
         } while (incrementIndex(i, Circle));
     }
     std::sort(absChords.data(), absChords.data() + absChords.size(), absChordSortPredicate);
-    return areAbsChordsDetatched(Knot, absChords);
+    AbsChords = p_absChords;
+}
 
 bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndIndex) {
     std::vector<AbsChord>* p_absChords;
