@@ -67,20 +67,35 @@ void Unknotter::AbsKnot::RemoveRange(AbsLength Range) {
 }
 
 void Unknotter::AbsKnot::RemoveRange(size_t LowerIndex, size_t UpperIndex) {
+    size_t* arr;
+    size_t* arr2;
+    size_t* arr3;
     if (LowerIndex > UpperIndex) {
-        //optimize
-        RemoveRange(LowerIndex, crosses.size());
-        RemoveRange(0, UpperIndex);
+        size_t diff = AbsLength(LowerIndex, UpperIndex).RangeSize(crosses.size());
+        arr = new size_t[diff << 1];
+        size_t* arr1_5 = arr + UpperIndex;
+        arr2 = arr + diff;
+        std::iota(arr, arr1_5, 0);
+        std::iota(arr1_5, arr2, LowerIndex);
+        arr3 = arr2;
+        for (size_t i = LowerIndex; i < UpperIndex; ++i) {
+            size_t idx = crosses[i].crossingIndex;
+            if (idx < LowerIndex && idx >= UpperIndex) {
+                *(arr3++) = idx;
+            }
+        }
     }
-    size_t diff = UpperIndex - LowerIndex;
-    size_t* arr = new size_t[diff << 1];
-    size_t* arr2 = arr + diff;
-    std::iota(arr, arr2, LowerIndex);
-    size_t* arr3 = arr2;
-    for (size_t i = LowerIndex; i < UpperIndex; ++i) {
-        size_t idx = crosses[i].crossingIndex;
-        if (idx < LowerIndex || idx >= UpperIndex) {
-            *(arr3++) = idx;
+    else {
+        size_t diff = UpperIndex - LowerIndex;
+        arr = new size_t[diff << 1];
+        arr2 = arr + diff;
+        std::iota(arr, arr2, LowerIndex);
+        arr3 = arr2;
+        for (size_t i = LowerIndex; i < UpperIndex; ++i) {
+            size_t idx = crosses[i].crossingIndex;
+            if (idx < LowerIndex || idx >= UpperIndex) {
+                *(arr3++) = idx;
+            }
         }
     }
     std::sort(arr2, arr3);
