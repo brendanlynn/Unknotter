@@ -3,19 +3,24 @@
 #include "abslengths.h"
 #include <algorithm>
 
+using Unknotter::AbsCircle;
+using Unknotter::AbsCross;
+using Unknotter::AbsKnot;
+using Unknotter::AbsLength;
+
 struct AbsChord final {
-    Unknotter::AbsLength length;
+    AbsLength length;
     bool over;
-    constexpr __forceinline AbsChord(Unknotter::AbsLength Length, bool Over)
+    constexpr __forceinline AbsChord(AbsLength Length, bool Over)
         : length(Length),
           over(Over) { }
 };
 
-__forceinline size_t initIndex(const Unknotter::AbsCircle& Circle) {
+__forceinline size_t initIndex(const AbsCircle& Circle) {
     return Circle.l1.index2;
 }
 
-__forceinline bool incrementIndex(size_t& Index, const Unknotter::AbsCircle& Circle) {
+__forceinline bool incrementIndex(size_t& Index, const AbsCircle& Circle) {
     ++Index;
     if (Index == Circle.l1.index1) {
         return false;
@@ -45,7 +50,7 @@ __forceinline size_t binarySearchAbsChords(const std::vector<AbsChord>& AbsChord
     return lwr;
 }
 
-__forceinline bool areAbsChordsDetatched(const Unknotter::AbsKnot& Knot, const std::vector<AbsChord>& AbsChords) {
+__forceinline bool areAbsChordsDetatched(const AbsKnot& Knot, const std::vector<AbsChord>& AbsChords) {
     for (const AbsChord& chord : AbsChords) {
         for (size_t i = chord.length.index1 + 1; i < chord.length.index2; ++i) {
             size_t j = binarySearchAbsChords(AbsChords, Knot[i].crossingIndex);
@@ -60,10 +65,11 @@ __forceinline bool areAbsChordsDetatched(const Unknotter::AbsKnot& Knot, const s
     return true;
 }
 
-bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndIndex) {
+bool getChordsConditionally(const AbsKnot& Knot, size_t StartEndIndex, std::vector<AbsChord>*& AbsChords) {
     size_t otherIndex = Knot[StartEndIndex].crossingIndex;
     AbsLength range(StartEndIndex, otherIndex);
-    std::vector<AbsChord> absChords;
+    auto* p_absChords = new std::vector<AbsChord>;
+    std::vector<AbsChord>& absChords = *p_absChords;
     {
         size_t i = otherIndex;
         bool inCircle = false;
@@ -95,15 +101,16 @@ bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndInde
         } while (i != StartEndIndex);
     }
     std::sort(absChords.data(), absChords.data() + absChords.size(), absChordSortPredicate);
-    return areAbsChordsDetatched(Knot, absChords);
+    AbsChords = p_absChords;
 }
 
-bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Circle) {
+bool getChordsConditionally(const AbsKnot& Knot, const AbsCircle& Circle, std::vector<AbsChord>*& AbsChords) {
     bool upperPrimary = Knot[Circle.l1.index1].over;
     if (upperPrimary != Knot[Circle.l1.index2].over) {
         return false;
     }
-    std::vector<AbsChord> absChords;
+    auto* p_absChords = new std::vector<AbsChord>;
+    std::vector<AbsChord>& absChords = *p_absChords;
     {
         size_t i = initIndex(Circle);
         bool inCircle = false;
@@ -159,6 +166,17 @@ bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Ci
     }
     std::sort(absChords.data(), absChords.data() + absChords.size(), absChordSortPredicate);
     return areAbsChordsDetatched(Knot, absChords);
+
+bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndIndex) {
+    std::vector<AbsChord>* p_absChords;
+    getChordsConditionally(Knot, StartEndIndex, p_absChords);
+    return areAbsChordsDetatched(Knot, *p_absChords);
+}
+
+bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Circle) {
+    std::vector<AbsChord>* p_absChords;
+    getChordsConditionally(Knot, Circle, p_absChords);
+    return areAbsChordsDetatched(Knot, *p_absChords);
 }
 
 bool Unknotter::TryToRemoveImmediately(AbsKnot& Knot, size_t StartEndIndex) {
