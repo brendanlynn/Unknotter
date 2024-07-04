@@ -4,7 +4,7 @@
 #include <set>
 #include <numeric>
 
-void subtractByList(size_t& Index, const size_t* Array, size_t Length) {
+size_t passByOnList(size_t Index, const size_t* Array, size_t Length) {
     size_t lwr = 0;
     size_t upr = Length;
     while (upr - lwr > 1) {
@@ -16,7 +16,11 @@ void subtractByList(size_t& Index, const size_t* Array, size_t Length) {
             upr = avg;
         }
     }
-    Index -= lwr;
+    return lwr;
+}
+
+void subtractByList(size_t& Index, const size_t* Array, size_t Length) {
+    Index -= passByOnList(Index, Array, Length);
 }
 
 void removePresorted(Unknotter::AbsKnot& Knot, size_t* Indicies, size_t IndexCount) {
