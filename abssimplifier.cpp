@@ -99,30 +99,61 @@ bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, size_t StartEndInde
 }
 
 bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Circle) {
+    bool upperPrimary = Knot[Circle.l1.index1].over;
+    if (upperPrimary != Knot[Circle.l1.index2].over) {
+        return false;
+    }
     std::vector<AbsChord> absChords;
     {
         size_t i = initIndex(Circle);
         bool inCircle = false;
         size_t inCircleSince;
-        bool wentOver;
+        bool lastOver;
+        bool lastPrimary;
         do {
             const AbsCross& cross = Knot[i];
             size_t j = cross.crossingIndex;
-            if (Circle.OnCircle(j)) {
-                if (inCircle) {
-                    if (wentOver != cross.over) {
-                        return false;
+
+            bool primary;
+            if (Circle.l1.InRange(j)) primary = true;
+            else if (Circle.l2.InRange(j)) primary = false;
+            else continue;
+
+            bool over = cross.over;
+
+            if (inCircle) {
+                if (lastOver != over) {
+                    if (lastPrimary) {
+                        if (primary) {
+                            return false;
+                        }
+                        else {
+                            if (upperPrimary != over) {
+                                return false;
+                            }
+                        }
                     }
-                    AbsLength len(inCircleSince, i);
-                    AbsChord chord(len, wentOver);
-                    inCircle = false;
-                    absChords.push_back(chord);
+                    else {
+                        if (primary) {
+                            if (upperPrimary == over) {
+                                return false;
+                            }
+                        }
+                        else {
+                            return false;
+                        }
+                    }
                 }
-                else {
-                    inCircle = true;
-                    inCircleSince = i;
-                    wentOver = cross.over;
-                }
+                AbsLength len(inCircleSince, i);
+                AbsChord chord(len, lastOver);
+                inCircle = false;
+                absChords.push_back(chord);
+            }
+            else {
+                inCircle = true;
+                inCircleSince = i;
+                lastOver = over;
+                lastPrimary = primary;
             }
         } while (incrementIndex(i, Circle));
     }
