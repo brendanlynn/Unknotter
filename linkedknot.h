@@ -170,5 +170,16 @@ namespace Unknotter {
                 p.r = NewMemory;
             }
         }
+        //Removes a range of crossovers, between Lower.r and Upper, starting in the direction of Lower.over.
+        static __forceinline void RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper) {
+            LinkedCross*& p = Lower.r;
+            bool& over = Lower.over;
+            do {
+                LinkedCross* cp = p;
+                TravelN(p, over);
+                cp->Remove();
+                delete cp;
+            } while (p != Upper);
+        }
     };
 }
