@@ -46,6 +46,7 @@ namespace Unknotter {
         LinkedCrossPointer l_n;
         LinkedCrossPointer u_p;
         LinkedCrossPointer u_n;
+        //Removes a node from the rest of the network. The function only disconnects the node; it does not dispose of it. It is the user's responsibility to make the choice whether or not to reuse the memory or delete it.
         __forceinline void Remove() {
             if (l_p.over) {
                 l_p.r->u_n = l_n;
@@ -78,6 +79,7 @@ namespace Unknotter {
             Over = Ref.over;
         }
     public:
+        //Travels to the next node, of the direction given by Over. To turn, not Over.
         static __forceinline void TravelN(const LinkedCross*& Current, bool& Over) {
             if (Over) {
                 GoToRef(Current, Over, Current->u_n);
@@ -86,6 +88,7 @@ namespace Unknotter {
                 GoToRef(Current, Over, Current->l_n);
             }
         }
+        //Travels to the previous node, of the direction given by Over. To turn, not Over.
         static __forceinline void TravelP(const LinkedCross*& Current, bool& Over) {
             if (Over) {
                 GoToRef(Current, Over, Current->u_p);
@@ -94,6 +97,7 @@ namespace Unknotter {
                 GoToRef(Current, Over, Current->l_p);
             }
         }
+        //Connects the string behind two nodes, Upper crossing over Lower. If NewMemory is null, the function will allocate memory resources on its own.
         static __forceinline void Add(LinkedCrossReference Upper, LinkedCrossReference Lower, LinkedCross* NewMemory) {
             if (!NewMemory) {
                 NewMemory = new LinkedCross;
