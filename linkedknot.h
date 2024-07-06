@@ -39,7 +39,7 @@ namespace Unknotter {
         //Travels to the previous node, of the direction given by Over. To turn, not Over.
         static __forceinline void TravelP(const LinkedCross*& Current, bool& Over);
         //Connects the string behind two nodes, Upper crossing over Lower. If NewMemory is null, the function will allocate memory resources on its own.
-        static void Add(LinkedCrossReference Upper, LinkedCrossReference Lower, LinkedCross* NewMemory);
+        static LinkedCross* Add(LinkedCrossReference Upper, LinkedCrossReference Lower);
         //Removes a range of crossovers, between Lower.r and Upper, starting in the direction of Lower.over.
         static void RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper);
     };

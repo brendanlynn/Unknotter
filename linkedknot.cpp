@@ -1,11 +1,9 @@
 #include "linkedknot.h"
 
-void Unknotter::LinkedCross::Add(LinkedCrossReference Upper, LinkedCrossReference Lower, LinkedCross* NewMemory) {
-    if (!NewMemory) {
-        NewMemory = new LinkedCross;
-    }
+Unknotter::LinkedCross* Unknotter::LinkedCross::Add(LinkedCrossReference Upper, LinkedCrossReference Lower) {
+    auto* ptr = new LinkedCross;
 
-    LinkedCross& nlc = *NewMemory;
+    LinkedCross& nlc = *ptr;
 
     bool un_u = Upper.over;
     LinkedCross& un = Upper.r;
@@ -24,53 +22,54 @@ void Unknotter::LinkedCross::Add(LinkedCrossReference Upper, LinkedCrossReferenc
         LinkedCrossPointer& p = un.u_p;
         nlc.u_p = p;
         p.over = true;
-        p.r = NewMemory;
+        p.r = ptr;
     }
     else {
         LinkedCrossPointer& p = un.l_p;
         nlc.u_p = p;
         p.over = true;
-        p.r = NewMemory;
+        p.r = ptr;
     }
 
     if (up_u) {
         LinkedCrossPointer& p = up.u_n;
         nlc.u_n = p;
         p.over = true;
-        p.r = NewMemory;
+        p.r = ptr;
     }
     else {
         LinkedCrossPointer& p = up.l_n;
         nlc.u_n = p;
         p.over = true;
-        p.r = NewMemory;
+        p.r = ptr;
     }
 
     if (ln_u) {
         LinkedCrossPointer& p = ln.u_p;
         nlc.l_p = p;
         p.over = false;
-        p.r = NewMemory;
+        p.r = ptr;
     }
     else {
         LinkedCrossPointer& p = ln.l_p;
         nlc.l_p = p;
         p.over = false;
-        p.r = NewMemory;
+        p.r = ptr;
     }
 
     if (lp_u) {
         LinkedCrossPointer& p = lp.u_n;
         nlc.l_n = p;
         p.over = false;
-        p.r = NewMemory;
+        p.r = ptr;
     }
     else {
         LinkedCrossPointer& p = lp.l_n;
         nlc.l_n = p;
         p.over = false;
-        p.r = NewMemory;
+        p.r = ptr;
     }
+    return ptr;
 }
 
 void Unknotter::LinkedCross::Remove() {
