@@ -62,8 +62,7 @@ void Unknotter::AbsKnot::RemoveAtFull(const size_t* Indicies, size_t IndexCount)
     if (IndexCount & 1) {
         throw std::exception("It is impossible for all nodes present to have their corresponding node also present when IndexCount is odd.");
     }
-    std::vector<size_t> arr(IndexCount);
-    memcpy(arr.data(), Indicies, IndexCount * sizeof(size_t));
+    std::vector<size_t> arr(Indicies, Indicies + IndexCount);
     std::sort(arr.data(), arr.data() + IndexCount); //ascending
     removePresorted(*this, arr.data(), IndexCount);
 }
