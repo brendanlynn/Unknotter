@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="absknot.cpp" />
     <ClCompile Include="abssimplifier.cpp" />
+    <ClCompile Include="linkedknot.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
