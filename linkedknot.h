@@ -34,9 +34,9 @@ namespace Unknotter {
     private:
         static __forceinline void GoToRef(const LinkedCross*& Current, bool& Over, const LinkedCrossPointer& Ref);
     public:
-        //Travels to the next node, of the direction given by Over. To turn, not Over.
+        //Travels to the next node, aligned to the direction given by Over. To turn, not Over.
         static __forceinline void TravelN(const LinkedCross*& Current, bool& Over);
-        //Travels to the previous node, of the direction given by Over. To turn, not Over.
+        //Travels to the previous node, aligned to the direction given by Over. To turn, not Over.
         static __forceinline void TravelP(const LinkedCross*& Current, bool& Over);
         //Connects the string behind two nodes, Upper crossing over Lower. If NewMemory is null, the function will allocate memory resources on its own.
         static LinkedCross* Add(LinkedCrossReference Upper, LinkedCrossReference Lower);
