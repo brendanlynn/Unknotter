@@ -25,11 +25,13 @@ void subtractByList(size_t& Index, const size_t* Array, size_t Length) {
 
 void removePresorted(Unknotter::AbsKnot& Knot, size_t* Indicies, size_t IndexCount) {
     size_t c = Indicies[0];
-    for (size_t i = 1; i < IndexCount; ++i) {
+    for (size_t i = 1; i <= IndexCount; ++i) {
         size_t s = Indicies[i - 1] + 1;
-        size_t l = Indicies[i] - s;
+        size_t l = ((i == IndexCount) ? Knot.crosses.size() : Indicies[i]) - s;
         memcpy(Knot.crosses.data() + c, Knot.crosses.data() + s, sizeof(Unknotter::AbsCross) * l);
+        c += l;
     }
+    Knot.crosses.erase(Knot.crosses.end() - IndexCount, Knot.crosses.end());
     for (auto& cross : Knot.crosses) {
         subtractByList(cross.crossingIndex, Indicies, IndexCount);
     }
