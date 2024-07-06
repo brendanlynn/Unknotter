@@ -29,7 +29,7 @@ namespace Unknotter {
         LinkedCrossPointer l_n;
         LinkedCrossPointer u_p;
         LinkedCrossPointer u_n;
-        //Removes a node from the rest of the network. The function only disconnects the node; it does not dispose of it. It is the user's responsibility to make the choice whether or not to reuse the memory or delete it.
+        //Removes a node from the rest of the network. The function only disconnects the node from the rest of the network; it does not dispose of the memory the node takes up.
         void Remove();
     private:
         static __forceinline void GoToRef(const LinkedCross*& Current, bool& Over, const LinkedCrossPointer& Ref);
