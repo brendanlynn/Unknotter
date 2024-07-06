@@ -38,10 +38,17 @@ void removePresorted(Unknotter::AbsKnot& Knot, size_t* Indicies, size_t IndexCou
 }
 
 void Unknotter::AbsKnot::RemoveAt(size_t Index) {
+    size_t oi = crosses[Index].crossingIndex;
     size_t indicies[2];
-    indicies[0] = Index;
-    indicies[1] = crosses[Index].crossingIndex;
-    RemoveAtFull(indicies, 2);
+    if (oi > Index) {
+        indicies[0] = Index;
+        indicies[1] = oi;
+    }
+    else {
+        indicies[0] = oi;
+        indicies[1] = Index;
+    }
+    removePresorted(*this, indicies, 2);
 }
 void Unknotter::AbsKnot::RemoveAt(const size_t* Indicies, size_t IndexCount) {
     std::vector<size_t> arr(IndexCount);
@@ -53,7 +60,8 @@ void Unknotter::AbsKnot::RemoveAt(const size_t* Indicies, size_t IndexCount) {
             arr.push_back(i);
         }
     }
-    RemoveAtFull(arr.data(), arr.size());
+    std::sort(arr.data(), arr.data() + IndexCount); //ascending
+    removePresorted(*this, arr.data(), IndexCount);
 }
 void Unknotter::AbsKnot::RemoveAtFull(const size_t* Indicies, size_t IndexCount) {
     if (!IndexCount) {
