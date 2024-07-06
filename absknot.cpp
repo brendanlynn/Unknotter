@@ -248,7 +248,9 @@ void Unknotter::AbsKnot::AddAt(const std::pair<size_t, size_t>* NewCrosses, size
     addPresorted(*this, newCrossesResizable.data(), newCrossesResizable.size());
     if (ReferenceShifts) {
         size_t* shifts = new size_t[newCrossesResizable.size()];
-        std::copy(newCrossesResizable.data(), newCrossesResizable.data() + newCrossesResizable.size(), shifts);
+        for (size_t i = 0; i < newCrossesResizable.size(); ++i) {
+            shifts[i] = newCrossesResizable[i].first;
+        }
         *ReferenceShifts = std::pair<size_t*, size_t>(shifts, newCrossesResizable.size());
     }
 }
@@ -267,7 +269,9 @@ void Unknotter::AbsKnot::AddAtFull(const std::pair<size_t, size_t>* NewCrosses, 
     addPresorted(*this, arr.data(), CrossCount);
     if (ReferenceShifts) {
         size_t* shifts = new size_t[arr.size()];
-        std::copy(arr.data(), arr.data() + arr.size(), shifts);
+        for (size_t i = 0; i < arr.size(); ++i) {
+            shifts[i] = arr[i].first;
+        }
         *ReferenceShifts = std::pair<size_t*, size_t>(shifts, arr.size());
     }
 }
