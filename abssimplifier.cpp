@@ -186,7 +186,7 @@ bool Unknotter::CanBeRemovedImmediately(const AbsKnot& Knot, const AbsCircle& Ci
 
 bool Unknotter::TryToRemoveImmediately(AbsKnot& Knot, size_t StartEndIndex) {
     if (CanBeRemovedImmediately(Knot, StartEndIndex)) {
-        Knot.RemoveRange(StartEndIndex, Knot[StartEndIndex].crossingIndex);
+        Knot.RemoveRange(StartEndIndex, Knot[StartEndIndex].crossingIndex, 0);
         return true;
     }
     return false;
