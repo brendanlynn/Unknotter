@@ -3,9 +3,13 @@
 #include <algorithm>
 
 namespace Unknotter {
-    struct AbsShift final {
-        const size_t const* data;
-        const size_t length;
+    class AbsShift final {
+    private:
+        const size_t* data;
+        size_t length;
+    public:
+        __forceinline const size_t* Data() const;
+        __forceinline size_t Length() const;
 
         __forceinline AbsShift(const size_t* Data, size_t Length);
 
@@ -23,9 +27,15 @@ namespace Unknotter {
     };
 }
 
+__forceinline const size_t* Unknotter::AbsShift::Data() const {
+    return data;
+}
+__forceinline size_t Unknotter::AbsShift::Length() const {
+    return length;
+}
 __forceinline Unknotter::AbsShift::AbsShift(const size_t* Data, size_t Length)
     : data(Data),
-    length(Length) { }
+      length(Length) { }
 __forceinline Unknotter::AbsShift Unknotter::AbsShift::FromCopy(const size_t* Data, size_t Length) {
     size_t* data = new size_t[Length];
     std::copy(Data, Data + Length, data);
