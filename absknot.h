@@ -24,6 +24,12 @@ namespace Unknotter {
         void RemoveRange(AbsLength Range);
         //Removes the crossovers in the given range. Both the nodes in the range and the nodes corresponding to nodes in the range will be removed. The lower bound of the range is inclusive; the upper bound of the range is not.
         void RemoveRange(size_t LowerIndex, size_t UpperIndex);
+        //Adds a crossover at the position specified. Behavior is undefined if the indicies are equal. Each index should be in the range [0, crosses.size()].
+        void AddAt(size_t Index1, size_t Index2);
+        //Adds crossovers at the positions specified. Behavior is undefined if a pair of indicies are equal to each other. Each index should be in the range [0, crosses.size()].
+        void AddAt(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount);
+        //Adds crossovers at the positions specified. Behavior is undefined if a pair of indicies are equal to each other. Each index should be in the range [0, crosses.size()]. The function assumes that all nodes in the list also have their corresponding node in the list. If this assumption is false, the behavior of the function is undefined, and may corrupt the struct.
+        void AddAtFull(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount);
         //The number of crossovers. The number of nodes is always twice the number of crossovers.
         __forceinline size_t CrossoverCount() const {
             return crosses.size() >> 1;

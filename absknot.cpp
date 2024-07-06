@@ -19,8 +19,27 @@ size_t passByOnList(size_t Index, const size_t* Array, size_t Length) {
     return lwr;
 }
 
+size_t passByOnList(size_t Index, const std::pair<size_t, size_t>* Array, size_t Length) {
+    size_t lwr = 0;
+    size_t upr = Length;
+    while (upr - lwr > 1) {
+        size_t avg = (upr + lwr) >> 1;
+        if (Array[avg].first >= Index) {
+            lwr = avg;
+        }
+        else {
+            upr = avg;
+        }
+    }
+    return lwr;
+}
+
 void subtractByList(size_t& Index, const size_t* Array, size_t Length) {
     Index -= passByOnList(Index, Array, Length);
+}
+
+void addByList(size_t& Index, const std::pair<size_t, size_t>* Array, size_t Length) {
+    Index += passByOnList(Index, Array, Length);
 }
 
 void removePresorted(Unknotter::AbsKnot& Knot, size_t* Indicies, size_t IndexCount) {
@@ -34,6 +53,22 @@ void removePresorted(Unknotter::AbsKnot& Knot, size_t* Indicies, size_t IndexCou
     Knot.crosses.erase(Knot.crosses.end() - IndexCount, Knot.crosses.end());
     for (auto& cross : Knot.crosses) {
         subtractByList(cross.crossingIndex, Indicies, IndexCount);
+    }
+}
+
+void addPresorted(Unknotter::AbsKnot& Knot, std::pair<size_t, size_t>* Indicies, size_t IndexCount) {
+    Knot.crosses.resize(Knot.crosses.size() + IndexCount);
+    Unknotter::AbsCross* c = Knot.crosses.data() + Knot.crosses.size();
+    for (size_t i = IndexCount; i > 0; --i) {
+        size_t j = i - 1;
+        size_t iV = (i == IndexCount) ? Knot.crosses.size() : Indicies[i].first;
+        size_t jV = Indicies[j].first;
+        size_t diff = iV - jV;
+        c -= diff;
+        memcpy(c, Knot.crosses.data() + jV, diff * sizeof(Unknotter::AbsCross));
+    }
+    for (auto& cross : Knot.crosses) {
+        addByList(cross.crossingIndex, Indicies, IndexCount);
     }
 }
 
@@ -140,4 +175,48 @@ void Unknotter::AbsKnot::RemoveRange(size_t LowerIndex, size_t UpperIndex) {
     removePresorted(*this, arr4, finalLength);
     delete[] arr;
     delete[] arr4;
+}
+
+void Unknotter::AbsKnot::AddAt(size_t Index1, size_t Index2) {
+    std::pair<size_t, size_t> indicies[2];
+    if (Index1 < Index2) {
+        indicies[0] = std::pair<size_t, size_t>(Index1, Index2);
+        indicies[1] = std::pair<size_t, size_t>(Index2, Index1);
+    }
+    else {
+        indicies[0] = std::pair<size_t, size_t>(Index2, Index1);
+        indicies[1] = std::pair<size_t, size_t>(Index1, Index2);
+    }
+    addPresorted(*this, indicies, 2);
+}
+
+void Unknotter::AbsKnot::AddAt(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount) {
+    const std::pair<size_t, size_t>* newCrossesUpper = NewCrosses + CrossCount;
+    std::set<std::pair<size_t, size_t>> crossSet(NewCrosses, newCrossesUpper);
+    std::vector<std::pair<size_t, size_t>> newCrossesResizable(NewCrosses, newCrossesUpper);
+    for (const std::pair<size_t, size_t>* p_i = NewCrosses; p_i < newCrossesUpper; ++p_i) {
+        const std::pair<size_t, size_t>& i = *p_i;
+        const std::pair<size_t, size_t> ri(i.second, i.first);
+        if (!crossSet.contains(ri)) {
+            newCrossesResizable.push_back(ri);
+        }
+    }
+    std::sort(newCrossesResizable.data(), newCrossesResizable.data() + CrossCount, [](auto& a, auto& b) {
+        return a.first > b.first;
+    }); //ascending
+    addPresorted(*this, newCrossesResizable.data(), newCrossesResizable.size());
+}
+
+void Unknotter::AbsKnot::AddAtFull(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount) {
+    if (!CrossCount) {
+        return;
+    }
+    if (CrossCount & 1) {
+        throw std::exception("It is impossible for all nodes present to have their corresponding node also present when IndexCount is odd.");
+    }
+    std::vector<std::pair<size_t, size_t>> arr(NewCrosses, NewCrosses + CrossCount);
+    std::sort(arr.data(), arr.data() + CrossCount, [](auto& a, auto& b) {
+        return a.first > b.first;
+    }); //ascending
+    addPresorted(*this, arr.data(), CrossCount);
 }
