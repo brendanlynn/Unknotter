@@ -15,21 +15,21 @@ namespace Unknotter {
     struct AbsKnot final {
         std::vector<AbsCross> crosses;
         //Removes the crossover indicated by the index. Two nodes will be removed in total, the one referenced, and the one corresponding.
-        void RemoveAt(size_t Index);
+        void RemoveAt(size_t Index, std::pair<size_t*, size_t>* ReferenceShifts);
         //Removes the crossovers indicated by the indicies. If a node is present without it's corresponding node, the corresponding node will also be removed.
-        void RemoveAt(const size_t* Indicies, size_t IndexCount);
+        void RemoveAt(const size_t* Indicies, size_t IndexCount, std::vector<size_t>** ReferenceShifts);
         //Removes the crossovers indicated by the indicies. The function assumes that all nodes in the list also have their corresponding node in the list. If this assumption is false, the behavior of the function is undefined, and may corrupt the struct.
-        void RemoveAtFull(const size_t* Indicies, size_t IndexCount);
+        void RemoveAtFull(const size_t* Indicies, size_t IndexCount, std::vector<size_t>** ReferenceShifts);
         //Removes the crossovers in the given range. Both the nodes in the range and the nodes corresponding to nodes in the range will be removed. The lower bound of the range is inclusive; the upper bound of the range is not.
-        void RemoveRange(AbsLength Range);
+        void RemoveRange(AbsLength Range, std::vector<size_t>** ReferenceShifts);
         //Removes the crossovers in the given range. Both the nodes in the range and the nodes corresponding to nodes in the range will be removed. The lower bound of the range is inclusive; the upper bound of the range is not.
-        void RemoveRange(size_t LowerIndex, size_t UpperIndex);
+        void RemoveRange(size_t LowerIndex, size_t UpperIndex, std::vector<size_t>** ReferenceShifts);
         //Adds a crossover at the position specified. Behavior is undefined if the indicies are equal. Each index should be in the range [0, crosses.size()].
-        void AddAt(size_t Index1, size_t Index2);
+        void AddAt(size_t Index1, size_t Index2, std::vector<size_t>** ReferenceShifts);
         //Adds crossovers at the positions specified. Behavior is undefined if a pair of indicies are equal to each other. Each index should be in the range [0, crosses.size()].
-        void AddAt(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount);
+        void AddAt(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount, std::vector<size_t>** ReferenceShifts);
         //Adds crossovers at the positions specified. Behavior is undefined if a pair of indicies are equal to each other. Each index should be in the range [0, crosses.size()]. The function assumes that all nodes in the list also have their corresponding node in the list. If this assumption is false, the behavior of the function is undefined, and may corrupt the struct.
-        void AddAtFull(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount);
+        void AddAtFull(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount, std::vector<size_t>** ReferenceShifts);
         //The number of crossovers. The number of nodes is always twice the number of crossovers.
         __forceinline size_t CrossoverCount() const {
             return crosses.size() >> 1;
