@@ -44,5 +44,8 @@
     <ClInclude Include="abscircle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="absshift.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
