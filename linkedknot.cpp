@@ -72,6 +72,47 @@ Unknotter::LinkedCross* Unknotter::LinkedCross::Add(LinkedCrossReference Upper, 
     return ptr;
 }
 
+template <bool _AfterUpper, bool _AfterLower>
+Unknotter::LinkedCross* Unknotter::LinkedCross::Add(LinkedCrossReference Upper, LinkedCrossReference Lower) {
+    LinkedCrossReference* p_upper;
+    LinkedCrossReference* p_lower;
+    
+    if constexpr (_AfterUpper) {
+        LinkedCross* u_p = &Upper.r;
+        bool u_o = Upper.over;
+
+        TravelN(*(const LinkedCross**)&u_p, u_o);
+
+        p_upper = new LinkedCrossReference(u_p, u_o);
+    }
+    else {
+        p_upper = new LinkedCrossReference(Upper);
+    }
+    if constexpr (_AfterLower) {
+        LinkedCross* l_p = &Upper.r;
+        bool l_o = Upper.over;
+
+        TravelN(*(const LinkedCross**)&l_p, l_o);
+
+        p_lower = new LinkedCrossReference(l_p, l_o);
+    }
+    else {
+        p_lower = new LinkedCrossReference(Lower);
+    }
+
+    auto* r = Add(*p_upper, *p_lower);
+
+    delete p_upper;
+    delete p_lower;
+
+    return r;
+}
+
+template Unknotter::LinkedCross* Unknotter::LinkedCross::Add<true, true>(LinkedCrossReference, LinkedCrossReference);
+template Unknotter::LinkedCross* Unknotter::LinkedCross::Add<true, false>(LinkedCrossReference, LinkedCrossReference);
+template Unknotter::LinkedCross* Unknotter::LinkedCross::Add<false, true>(LinkedCrossReference, LinkedCrossReference);
+template Unknotter::LinkedCross* Unknotter::LinkedCross::Add<false, false>(LinkedCrossReference, LinkedCrossReference);
+
 void Unknotter::LinkedCross::Remove() {
     if (l_p.over) {
         l_p.r->u_n = l_n;

@@ -40,6 +40,9 @@ namespace Unknotter {
         static __forceinline void TravelP(const LinkedCross*& Current, bool& Over);
         //Connects the string behind two nodes, Upper crossing over Lower.
         static LinkedCross* Add(LinkedCrossReference Upper, LinkedCrossReference Lower);
+        //Connects the string after/behind two nodes, Upper crossing over Lower.
+        template <bool _AfterUpper, bool _AfterLower>
+        static LinkedCross* Add(LinkedCrossReference Upper, LinkedCrossReference Lower);
         //Removes a range of crossovers, between Lower.r and Upper, starting in the direction of Lower.over.
         static void RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper);
     };
