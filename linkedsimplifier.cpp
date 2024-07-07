@@ -93,23 +93,18 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
     
     //distributes points of chords into sets by type of chord
 
-    std::unordered_set<LinkedCross*> setUU;
     std::unordered_set<LinkedCross*> setUL;
     std::unordered_set<LinkedCross*> setLL;
 
     for (LinkedChord chord : chords) {
         i_p = chord.contact_start;
         if (chord.over_start) {
-            i_o = true;
             if (chord.over_end) {
-                while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                    setUU.insert(i_p);
-                }
+                continue;
             }
-            else {
-                while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                    setUL.insert(i_p);
-                }
+            i_o = true;
+            while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
+                setUL.insert(i_p);
             }
         }
         else {
@@ -212,22 +207,16 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
 
     //distributes points of chords into sets by type of chord
 
-    std::unordered_set<LinkedCross*> setUU;
     std::unordered_set<LinkedCross*> setLL;
 
     for (LinkedChordNoSecond chord : chords) {
-        i_p = chord.contact_start;
         if (chord.over) {
-            i_o = true;
-            while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                setUU.insert(i_p);
-            }
+            continue;
         }
-        else {
-            i_o = false;
-            while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                setLL.insert(i_p);
-            }
+        i_p = chord.contact_start;
+        i_o = false;
+        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
+            setLL.insert(i_p);
         }
     }
 
