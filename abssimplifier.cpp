@@ -1,6 +1,6 @@
 #include "abssimplifier.h"
 
-#include "abslengths.h"
+#include "abslength.h"
 #include <algorithm>
 
 using Unknotter::AbsCircle;

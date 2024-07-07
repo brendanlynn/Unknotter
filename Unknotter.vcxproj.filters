@@ -38,7 +38,7 @@
     <ClInclude Include="abssimplifier.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="abslengths.h">
+    <ClInclude Include="abslength.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="abscircle.h">

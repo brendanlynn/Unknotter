@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "abslengths.h"
+#include "abslength.h"
 #include "absshift.h"
 
 namespace Unknotter {

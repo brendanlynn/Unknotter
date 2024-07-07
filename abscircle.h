@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abslengths.h"
+#include "abslength.h"
 #include "absknot.h"
 
 namespace Unknotter {
