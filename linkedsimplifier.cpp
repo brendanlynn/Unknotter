@@ -29,6 +29,10 @@ struct LinkedChordNoSecond final {
 };
 
 bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryStart_Over, LinkedCross* PrimaryEnd, bool SecondaryForward) {
+    if (PrimaryStart == PrimaryEnd) {
+        return CanBeRemovedImmediately(PrimaryStart, PrimaryStart_Over);
+    }
+    
     //gets crosses in primary band, excluding endpoints
 
     std::unordered_set<LinkedCross*> set_primary;
