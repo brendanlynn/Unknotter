@@ -91,75 +91,50 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
         }
     }
     
-    //distributes points of chords into sets by type of chord
+    //distributes points of chords into sets by type of chord,
+    //and returns false if a higher type crosses below a lower type
 
-    std::unordered_set<LinkedCross*> setUL;
-    std::unordered_set<LinkedCross*> setLL;
+    std::unordered_set<LinkedCross*> setU;
 
+    std::unordered_set<LinkedCross*> set1_L;
     for (LinkedChord chord : chords) {
-        i_p = chord.contact_start;
-        if (chord.over_start) {
-            if (chord.over_end) {
-                continue;
-            }
+        if (chord.over_start && chord.over_end) {
+            i_p = chord.contact_start;
             i_o = true;
             while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                setUL.insert(i_p);
-            }
-        }
-        else {
-            i_o = false;
-            if (chord.over_end) {
-                while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                    setUL.insert(i_p);
+                if (i_o) {
+                    setU.insert(i_p);
                 }
-            }
-            else {
-                while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                    setLL.insert(i_p);
+                else {
+                    set1_L.insert(i_p);
                 }
             }
         }
     }
+    for (LinkedCross* v : set1_L) {
+        if (!setU.contains(v)) {
+            return false;
+        }
+    }
 
-    //detects any chords that would prevent the loop from being pulled out
-
+    std::unordered_set<LinkedCross*> set2_L;
     for (LinkedChord chord : chords) {
-        i_p = chord.contact_start;
-        i_o = chord.over_start;
-        int_fast32_t t;
-        if (chord.over_start) {
-            if (chord.over_end) {
-                t = 0;
-            }
-            else {
-                t = 1;
-            }
-        }
-        else {
-            if (chord.over_end) {
-                t = 1;
-            }
-            else {
-                t = 2;
-            }
-        }
-        switch (t) {
-        case 0:
+        if (chord.over_start != chord.over_end) {
+            i_p = chord.contact_start;
+            i_o = chord.over_start;
             while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                if (i_o) continue;
-                if (setUL.contains(i_p) || setLL.contains(i_p)) {
-                    return false;
+                if (i_o) {
+                    setU.insert(i_p);
+                }
+                else {
+                    set2_L.insert(i_p);
                 }
             }
-            break;
-        case 1:
-            while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-                if (i_o) continue;
-                if (setLL.contains(i_p)) {
-                    return false;
-                }
-            }
+        }
+    }
+    for (LinkedCross* v : set2_L) {
+        if (!setU.contains(v)) {
+            return false;
         }
     }
 
