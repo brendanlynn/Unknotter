@@ -7,17 +7,13 @@ struct LinkedChord final {
     Unknotter::LinkedCross* contact_end;
     bool over_start;
     bool over_end;
-    bool primary_start;
-    bool primary_end;
 
     __forceinline LinkedChord() = default;
-    __forceinline LinkedChord(Unknotter::LinkedCross* Contact_Start, Unknotter::LinkedCross* Contact_End, bool Over_Start, bool Over_End, bool Primary_Start, bool Primary_End)
+    __forceinline LinkedChord(Unknotter::LinkedCross* Contact_Start, Unknotter::LinkedCross* Contact_End, bool Over_Start, bool Over_End)
         : contact_start(Contact_Start),
           contact_end(Contact_End),
           over_start(Over_Start),
-          over_end(Over_End),
-          primary_start(Primary_Start),
-          primary_end(Primary_End) { }
+          over_end(Over_End) { }
 };
 
 struct LinkedChordNoSecond final {
@@ -81,7 +77,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
                     if (lastOver != over && (lastPrimary == primary || over ^ primary ^ PrimaryStart_Over)) {
                         return false;
                     }
-                    LinkedChord lc(lastContactPoint, contactPoint, lastOver, over, lastPrimary, primary);
+                    LinkedChord lc(lastContactPoint, contactPoint, lastOver, over);
                     chords.push_back(lc);
                     inside = false;
                 }
