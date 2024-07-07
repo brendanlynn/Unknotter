@@ -180,34 +180,29 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
         }
     }
 
-    //distributes points of chords into sets by type of chord
+    //distributes points of chords into sets by type of chord,
+    //and returns false if a higher type crosses below a lower type
 
-    std::unordered_set<LinkedCross*> setLL;
+    std::unordered_set<LinkedCross*> setU;
+    std::unordered_set<LinkedCross*> set1_L;
 
     for (LinkedChordNoSecond chord : chords) {
         if (chord.over) {
-            continue;
-        }
-        i_p = chord.contact_start;
-        i_o = false;
-        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-            setLL.insert(i_p);
+            i_p = chord.contact_start;
+            i_o = true;
+            while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
+                if (i_o) {
+                    setU.insert(i_p);
+                }
+                else {
+                    set1_L.insert(i_p);
+                }
+            }
         }
     }
-
-    //detects any chords that would prevent the loop from being pulled out
-
-    for (LinkedChordNoSecond chord : chords) {
-        if (!chord.over) {
-            continue;
-        }
-        i_p = chord.contact_start;
-        i_o = true;
-        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
-            if (i_o) continue;
-            if (setLL.contains(i_p)) {
-                return false;
-            }
+    for (LinkedCross* v : set1_L) {
+        if (!setU.contains(v)) {
+            return false;
         }
     }
 
