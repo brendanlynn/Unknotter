@@ -72,7 +72,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
         bool lastOver;
         bool lastPrimary;
         LinkedCross* lastContactPoint = 0;
-        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
+        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
             if (set_combined.contains(i_p)) {
                 bool over = i_o;
                 bool primary = set_primary.contains(i_p);
@@ -82,6 +82,35 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
                         return false;
                     }
                     LinkedChord lc(lastContactPoint, contactPoint, lastOver, over);
+                    chords.push_back(lc);
+                    inside = false;
+                }
+                else {
+                    lastOver = over;
+                    lastPrimary = primary;
+                    lastContactPoint = contactPoint;
+                    inside = true;
+                }
+            }
+        }
+    }
+    i_p = PrimaryStart;
+    i_o = PrimaryStart_Over;
+    {
+        bool inside = false;
+        bool lastOver;
+        bool lastPrimary;
+        LinkedCross* lastContactPoint = 0;
+        while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
+            if (set_combined.contains(i_p)) {
+                bool over = i_o;
+                bool primary = set_primary.contains(i_p);
+                LinkedCross* contactPoint = i_p;
+                if (inside) {
+                    if (lastOver != over && (lastPrimary == primary || over ^ primary ^ PrimaryStart_Over)) {
+                        return false;
+                    }
+                    LinkedChord lc(contactPoint, lastContactPoint, over, lastOver);
                     chords.push_back(lc);
                     inside = false;
                 }
