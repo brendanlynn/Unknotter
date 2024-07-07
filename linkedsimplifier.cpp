@@ -20,6 +20,18 @@ struct LinkedChord final {
           primary_end(Primary_End) { }
 };
 
+struct LinkedChordNoSecond final {
+    Unknotter::LinkedCross* contact_start;
+    Unknotter::LinkedCross* contact_end;
+    bool over;
+
+    __forceinline LinkedChordNoSecond() = default;
+    __forceinline LinkedChordNoSecond(Unknotter::LinkedCross* Contact_Start, Unknotter::LinkedCross* Contact_End, bool Over)
+        : contact_start(Contact_Start),
+          contact_end(Contact_End),
+          over(Over) { }
+};
+
 bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryStart_Over, LinkedCross* PrimaryEnd, bool SecondaryForward) {
     //gets crosses in primary band, excluding endpoints
 
@@ -174,7 +186,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
 
     //gets chords of the area
 
-    std::vector<LinkedChord> chords;
+    std::vector<LinkedChordNoSecond> chords;
     i_p = PrimaryStartEnd;
     i_o = !PrimaryStartStartAbove;
     {
@@ -189,7 +201,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
                     if (lastOver != over) {
                         return false;
                     }
-                    LinkedChord lc(lastContactPoint, contactPoint, lastOver, over, true, true);
+                    LinkedChordNoSecond lc(lastContactPoint, contactPoint, over);
                     chords.push_back(lc);
                     inside = false;
                 }
@@ -207,9 +219,9 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
     std::unordered_set<LinkedCross*> setUU;
     std::unordered_set<LinkedCross*> setLL;
 
-    for (LinkedChord chord : chords) {
+    for (LinkedChordNoSecond chord : chords) {
         i_p = chord.contact_start;
-        if (chord.over_start) {
+        if (chord.over) {
             i_o = true;
             while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != chord.contact_end) {
                 setUU.insert(i_p);
@@ -225,8 +237,8 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
 
     //detects any chords that would prevent the loop from being pulled out
 
-    for (LinkedChord chord : chords) {
-        if (!chord.over_start) {
+    for (LinkedChordNoSecond chord : chords) {
+        if (!chord.over) {
             continue;
         }
         i_p = chord.contact_start;
