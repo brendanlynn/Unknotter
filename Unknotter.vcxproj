@@ -132,6 +132,7 @@
     <ClCompile Include="absknot.cpp" />
     <ClCompile Include="abssimplifier.cpp" />
     <ClCompile Include="linkedknot.cpp" />
+    <ClCompile Include="linkedsimplifier.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +142,7 @@
     <ClInclude Include="absshift.h" />
     <ClInclude Include="abssimplifier.h" />
     <ClInclude Include="linkedknot.h" />
+    <ClInclude Include="linkedsimplifier.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
