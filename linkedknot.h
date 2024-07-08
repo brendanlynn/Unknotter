@@ -30,6 +30,21 @@ namespace Unknotter {
         __forceinline bool operator!=(const LinkedCrossReference& Other);
     };
 
+    struct LinkedLength final {
+        //The inclusive lower bound of the range.
+        LinkedCrossPointer lower;
+        //The exclusive upper bound of the range.
+        LinkedCrossPointer upper;
+
+        __forceinline LinkedLength();
+        __forceinline LinkedLength(LinkedCrossPointer Lower, LinkedCrossPointer Upper);
+        __forceinline LinkedLength(LinkedCross* Lower_Pointer, bool Lower_Over, LinkedCross* Upper_Pointer, bool Upper_Over);
+
+        __forceinline std::vector<LinkedCrossPointer>* CompileLength() const;
+        __forceinline std::unordered_set<LinkedCross*>* CompileLength_Set() const;
+        __forceinline std::vector<LinkedCross*>* CompileLength_Vec() const;
+    };
+
     struct LinkedCross final {
         LinkedCrossPointer l_p;
         LinkedCrossPointer l_n;
@@ -53,6 +68,8 @@ namespace Unknotter {
         static void RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper);
         //Removes a range of crossovers, between Lower.r and Upper, starting in the direction of Lower.over.
         static void RemoveRange(LinkedCrossPointer Lower, LinkedCrossPointer Upper);
+        //Removes a range of crossovers, given by parameter 'Range'.
+        static void RemoveRange(LinkedLength Range);
         //Compiles a unordered set of all the pointers in the knot.
         static std::unordered_set<LinkedCross*>* CompileAll_Set(LinkedCross* Sample);
         //Compiles a vector of all the pointers in the knot.
@@ -103,6 +120,48 @@ __forceinline bool Unknotter::LinkedCrossReference::operator==(const LinkedCross
 }
 __forceinline bool Unknotter::LinkedCrossReference::operator!=(const LinkedCrossReference& Other) {
     return &r != &Other.r || over != Other.over;
+}
+
+
+__forceinline Unknotter::LinkedLength::LinkedLength() = default;
+__forceinline Unknotter::LinkedLength::LinkedLength(LinkedCrossPointer Lower, LinkedCrossPointer Upper)
+    : lower(Lower),
+      upper(Upper) { }
+__forceinline Unknotter::LinkedLength::LinkedLength(LinkedCross* Lower_Pointer, bool Lower_Over, LinkedCross* Upper_Pointer, bool Upper_Over)
+    : lower(Lower_Pointer, Lower_Over),
+      upper(Upper_Pointer, Upper_Over) { }
+__forceinline std::vector<Unknotter::LinkedCrossPointer>* Unknotter::LinkedLength::CompileLength() const {
+    auto* p_vec = new std::vector<Unknotter::LinkedCrossPointer>;
+    auto& vec = *p_vec;
+
+    LinkedCrossPointer lcp = lower;
+    do vec.push_back(lcp);
+    while (LinkedCross::TravelN(*(const LinkedCross**)&lcp.r, lcp.over), lcp != upper);
+    return p_vec;
+}
+__forceinline std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedLength::CompileLength_Set() const {
+    auto* p_set = new std::unordered_set<Unknotter::LinkedCross*>;
+    auto& set = *p_set;
+
+    LinkedCrossPointer lcp = lower;
+    do set.insert(lcp.r);
+    while (LinkedCross::TravelN(*(const LinkedCross**)&lcp.r, lcp.over), lcp != upper);
+    return p_set;
+}
+__forceinline std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedLength::CompileLength_Vec() const {
+    auto* p_set = CompileLength_Set();
+    auto& set = *p_set;
+    auto* p_vec = new std::vector<Unknotter::LinkedCross*>(set.size());
+    auto& vec = *p_vec;
+
+    size_t i = 0;
+    for (auto* ptr : set) {
+        vec[i++] = ptr;
+    }
+
+    delete p_set;
+
+    return p_vec;
 }
 
 __forceinline void Unknotter::LinkedCross::GoToRef(const LinkedCross*& Current, bool& Over, const LinkedCrossPointer& Ref) {

@@ -154,16 +154,17 @@ void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCross* 
 }
 
 void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCrossPointer Upper) {
-    std::unordered_set<LinkedCross*> set;
-    LinkedCross*& p = Lower.r;
-    bool& over = Lower.over;
-    do {
-        set.insert(p);
-    } while (TravelN(*(const LinkedCross**)&p, over), p != Upper.r || over != Upper.over);
+    RemoveRange(LinkedLength(Lower, Upper));
+}
+
+void Unknotter::LinkedCross::RemoveRange(LinkedLength Range) {
+    auto* p_set = Range.CompileLength_Set();
+    const auto& set = *p_set;
     for (auto* element : set) {
         element->Remove();
         delete element;
     }
+    delete p_set;
 }
 
 std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Set(LinkedCross* Sample) {
