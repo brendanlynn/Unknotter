@@ -15,6 +15,8 @@ namespace Unknotter {
         __forceinline LinkedCrossPointer(LinkedCross* Ref, bool Over);
         __forceinline LinkedCrossPointer(const LinkedCrossReference& Ref);
         __forceinline explicit operator LinkedCrossReference();
+        __forceinline bool operator==(LinkedCrossPointer& Other);
+        __forceinline bool operator!=(LinkedCrossPointer& Other);
     };
 
     struct LinkedCrossReference final {
@@ -24,6 +26,8 @@ namespace Unknotter {
         __forceinline LinkedCrossReference(LinkedCross* Ref, bool Over);
         __forceinline LinkedCrossReference(LinkedCrossPointer Ref);
         __forceinline operator LinkedCrossPointer();
+        __forceinline bool operator==(LinkedCrossReference& Other);
+        __forceinline bool operator!=(LinkedCrossReference& Other);
     };
 
     struct LinkedCross final {
@@ -75,6 +79,12 @@ __forceinline Unknotter::LinkedCrossPointer::LinkedCrossPointer(const LinkedCros
 __forceinline Unknotter::LinkedCrossPointer::operator Unknotter::LinkedCrossReference() {
     return LinkedCrossReference(r, over);
 }
+__forceinline bool Unknotter::LinkedCrossPointer::operator==(LinkedCrossPointer& Other) {
+    return r == Other.r && over == Other.over;
+}
+__forceinline bool Unknotter::LinkedCrossPointer::operator!=(LinkedCrossPointer& Other) {
+    return r != Other.r || over != Other.over;
+}
 
 __forceinline Unknotter::LinkedCrossReference::LinkedCrossReference(LinkedCross& Ref, bool Over)
     : r(Ref),
@@ -87,6 +97,12 @@ __forceinline Unknotter::LinkedCrossReference::LinkedCrossReference(LinkedCrossP
       over(Ref.over) { }
 __forceinline Unknotter::LinkedCrossReference::operator Unknotter::LinkedCrossPointer() {
     return LinkedCrossPointer(r, over);
+}
+__forceinline bool Unknotter::LinkedCrossReference::operator==(LinkedCrossReference& Other) {
+    return &r == &Other.r && over == Other.over;
+}
+__forceinline bool Unknotter::LinkedCrossReference::operator!=(LinkedCrossReference& Other) {
+    return &r != &Other.r || over != Other.over;
 }
 
 __forceinline void Unknotter::LinkedCross::GoToRef(const LinkedCross*& Current, bool& Over, const LinkedCrossPointer& Ref) {
