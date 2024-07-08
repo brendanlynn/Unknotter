@@ -357,5 +357,7 @@ size_t Unknotter::IterateRandomRemovalAttempts(LinkedCross* Sample, std::mt19937
         }
     }
 
+    delete p_crosses;
+
     return totalSuccesses;
 }
