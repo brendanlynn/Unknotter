@@ -151,8 +151,9 @@ void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCross* 
     } while (p != Upper);
 }
 
-std::unordered_set<Unknotter::LinkedCross*> Unknotter::LinkedCross::CompileAll(LinkedCross* Sample) {
-    std::unordered_set<LinkedCross*> set;
+std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Set(LinkedCross* Sample) {
+    auto* p_set = new std::unordered_set<LinkedCross*>;
+    auto& set = *p_set;
     LinkedCross* p = Sample;
     bool b = false;
     while (TravelN(*(const LinkedCross**)&p, b), p != Sample) {
@@ -162,5 +163,20 @@ std::unordered_set<Unknotter::LinkedCross*> Unknotter::LinkedCross::CompileAll(L
     while (TravelN(*(const LinkedCross**)&p, b), p != Sample) {
         set.insert(p);
     }
-    return set;
+    return p_set;
+}
+
+std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Vector(LinkedCross* Sample) {
+    auto* p_set = new std::vector<LinkedCross*>;
+    auto& set = *p_set;
+    LinkedCross* p = Sample;
+    bool b = false;
+    while (TravelN(*(const LinkedCross**)&p, b), p != Sample) {
+        set.push_back(p);
+    }
+    b = true;
+    while (TravelN(*(const LinkedCross**)&p, b), p != Sample) {
+        set.push_back(p);
+    }
+    return p_set;
 }
