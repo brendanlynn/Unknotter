@@ -167,18 +167,19 @@ std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_
 }
 
 std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Vector(LinkedCross* Sample) {
-    auto* p_set = new std::vector<LinkedCross*>;
+    auto* p_set = CompileAll_Set(Sample);
     auto& set = *p_set;
-    LinkedCross* p = Sample;
-    bool b = false;
-    while (TravelN(*(const LinkedCross**)&p, b), p != Sample) {
-        set.push_back(p);
+
+    auto* p_vec = new std::vector<LinkedCross*>;
+    auto& vec = *p_vec;
+
+    for (auto& e : set) {
+        vec.push_back(e);
     }
-    b = true;
-    while (TravelN(*(const LinkedCross**)&p, b), p != Sample) {
-        set.push_back(p);
-    }
-    return p_set;
+
+    delete p_set;
+
+    return p_vec;
 }
 
 void Unknotter::LinkedCross::DisposeAll(LinkedCross* Sample) {
