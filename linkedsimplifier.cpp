@@ -29,21 +29,21 @@ struct LinkedChordNoSecond final {
           over(Over) { }
 };
 
-bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryStart_Over, LinkedCross* PrimaryEnd, bool SecondaryForward) {
+bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryUpper, LinkedCross* PrimaryEnd, bool SecondaryForward) {
     if (PrimaryStart == PrimaryEnd) {
-        return CanBeRemovedImmediately(PrimaryStart, PrimaryStart_Over);
+        return CanBeRemovedImmediately(PrimaryStart, PrimaryUpper);
     }
     
     //gets crosses in primary band, excluding endpoints
 
     std::unordered_set<LinkedCross*> set_primary;
     LinkedCross* i_p = PrimaryStart;
-    bool i_o = PrimaryStart_Over;
+    bool i_o = PrimaryUpper;
     while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
         set_primary.insert(i_p);
     }
 
-    if (PrimaryStart_Over != i_o) {
+    if (PrimaryUpper != i_o) {
         return false;
     }
 
@@ -67,7 +67,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
 
     std::vector<LinkedChord> chords;
     i_p = PrimaryEnd;
-    i_o = PrimaryStart_Over;
+    i_o = PrimaryUpper;
     {
         bool inside = false;
         bool lastOver;
@@ -79,7 +79,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
                 bool primary = set_primary.contains(i_p);
                 LinkedCross* contactPoint = i_p;
                 if (inside) {
-                    if (lastOver != over && (lastPrimary == primary || over ^ primary ^ PrimaryStart_Over)) {
+                    if (lastOver != over && (lastPrimary == primary || over ^ primary ^ PrimaryUpper)) {
                         return false;
                     }
                     LinkedChord lc(lastContactPoint, contactPoint, lastOver, over);
@@ -96,7 +96,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
         }
     }
     i_p = PrimaryStart;
-    i_o = PrimaryStart_Over;
+    i_o = PrimaryUpper;
     {
         bool inside = false;
         bool lastOver;
@@ -108,7 +108,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
                 bool primary = set_primary.contains(i_p);
                 LinkedCross* contactPoint = i_p;
                 if (inside) {
-                    if (lastOver != over && (lastPrimary == primary || over ^ primary ^ PrimaryStart_Over)) {
+                    if (lastOver != over && (lastPrimary == primary || over ^ primary ^ PrimaryUpper)) {
                         return false;
                     }
                     LinkedChord lc(contactPoint, lastContactPoint, over, lastOver);
@@ -174,12 +174,12 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryS
 
     return true;
 }
-bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartStartAbove) {
+bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartUpper) {
     //gets crosses in primary band, excluding endpoints
 
     std::unordered_set<LinkedCross*> set_primary;
     LinkedCross* i_p = PrimaryStartEnd;
-    bool i_o = PrimaryStartStartAbove;
+    bool i_o = PrimaryStartUpper;
     while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStartEnd) {
         set_primary.insert(i_p);
     }
@@ -188,7 +188,7 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
 
     std::vector<LinkedChordNoSecond> chords;
     i_p = PrimaryStartEnd;
-    i_o = !PrimaryStartStartAbove;
+    i_o = !PrimaryStartUpper;
     {
         bool inside = false;
         bool lastOver;
@@ -243,12 +243,12 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
     return true;
 }
 
-bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryStart_Over, LinkedCross* PrimaryEnd, bool SecondaryForward) {
+bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUpper, LinkedCross* PrimaryEnd, bool SecondaryForward) {
     if (PrimaryStart == PrimaryEnd) {
-        return TryToRemoveImmediately(PrimaryStart, PrimaryStart_Over);
+        return TryToRemoveImmediately(PrimaryStart, PrimaryUpper);
     }
 
-    if (!CanBeRemovedImmediately(PrimaryStart, PrimaryStart_Over, PrimaryEnd, SecondaryForward)) {
+    if (!CanBeRemovedImmediately(PrimaryStart, PrimaryUpper, PrimaryEnd, SecondaryForward)) {
         return false;
     }
 
@@ -257,14 +257,14 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimarySt
 
     std::map<LinkedCross*, bool> escapeDirections;
     i_p = PrimaryStart;
-    i_o = PrimaryStart_Over;
+    i_o = PrimaryUpper;
     while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
         escapeDirections.insert(std::pair<LinkedCross*, bool>(i_p, false));
     }
 
 
     i_p = PrimaryEnd;
-    i_o = PrimaryStart_Over;
+    i_o = PrimaryUpper;
     {
         bool inside = false;
         while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
@@ -274,7 +274,7 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimarySt
         }
     }
     i_p = PrimaryStart;
-    i_o = PrimaryStart_Over;
+    i_o = PrimaryUpper;
     {
         bool inside = false;
         while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
@@ -285,15 +285,15 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimarySt
     }
 
     i_p = PrimaryStart;
-    i_o = PrimaryStart_Over;
+    i_o = PrimaryUpper;
     LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
     LinkedCross::RemoveRange(LinkedCrossPointer(i_p, i_o), PrimaryEnd);
 
     i_p = PrimaryStart;
-    i_o = PrimaryStart_Over;
+    i_o = PrimaryUpper;
     LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
     i_o = !i_o;
-    LinkedCrossReference startRef(PrimaryStart, !PrimaryStart_Over);
+    LinkedCrossReference startRef(PrimaryStart, !PrimaryUpper);
     if (SecondaryForward) {
         while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
             bool afterParallel = escapeDirections[i_p];
@@ -321,10 +321,10 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimarySt
 
     return true;
 }
-bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartStartAbove) {
-    if (!CanBeRemovedImmediately(PrimaryStartEnd, PrimaryStartStartAbove)) {
+bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartUpper) {
+    if (!CanBeRemovedImmediately(PrimaryStartEnd, PrimaryStartUpper)) {
         return false;
     }
-    LinkedCross::RemoveRange(LinkedCrossPointer(PrimaryStartEnd, PrimaryStartStartAbove), PrimaryStartEnd);
+    LinkedCross::RemoveRange(LinkedCrossPointer(PrimaryStartEnd, PrimaryStartUpper), PrimaryStartEnd);
     return true;
 }
