@@ -30,16 +30,20 @@ namespace Unknotter {
         //Adds crossovers at the positions specified. Behavior is undefined if a pair of indicies are equal to each other. Each index should be in the range [0, crosses.size()].
         void AddAt(const std::pair<size_t, size_t>* NewCrosses, size_t CrossCount, AbsShift* ReferenceShifts);
         //The number of crossovers. The number of nodes is always twice the number of crossovers.
-        __forceinline size_t CrossoverCount() const {
-            return crosses.size() >> 1;
-        }
+        __forceinline size_t CrossoverCount() const;
         //Returns the crossover node at the given index.
-        __forceinline AbsCross& operator[](size_t Index) {
-            return crosses[Index];
-        }
+        __forceinline AbsCross& operator[](size_t Index);
         //Returns the crossover node at the given index.
-        __forceinline const AbsCross& operator[](size_t Index) const {
-            return crosses[Index];
-        }
+        __forceinline const AbsCross& operator[](size_t Index) const;
     };
+}
+
+__forceinline size_t Unknotter::AbsKnot::CrossoverCount() const {
+    return crosses.size() >> 1;
+}
+__forceinline Unknotter::AbsCross& Unknotter::AbsKnot::operator[](size_t Index) {
+    return crosses[Index];
+}
+__forceinline const Unknotter::AbsCross& Unknotter::AbsKnot::operator[](size_t Index) const {
+    return crosses[Index];
 }
