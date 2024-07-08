@@ -154,6 +154,7 @@ void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCross* 
 std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Set(LinkedCross* Sample) {
     auto* p_set = new std::unordered_set<LinkedCross*>;
     auto& set = *p_set;
+    set.insert(Sample);
     LinkedCross* p = Sample;
     bool b = false;
     while (TravelN(*(const LinkedCross**)&p, b), p != Sample) {
