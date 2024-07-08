@@ -328,3 +328,34 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool Primar
     LinkedCross::RemoveRange(LinkedCrossPointer(PrimaryStartEnd, PrimaryStartUpper), PrimaryStartEnd);
     return true;
 }
+
+size_t Unknotter::IterateRandomRemovalAttempts(LinkedCross* Sample, std::mt19937_64& RNG, uint64_t Iterations) {
+    auto* p_crosses = LinkedCross::CompileAll_Vector(Sample);
+    auto& crosses = *p_crosses;
+    std::uniform_int_distribution<size_t> dis(0, crosses.size());
+    auto getCross = [&]() {
+        return crosses[dis(RNG)];
+    };
+
+    uint64_t r64;
+    uint32_t r64Pos = 0;
+    auto getBool = [&]() {
+        if (!r64Pos) {
+            r64 = RNG();
+            r64Pos = 1;
+        }
+        bool b = r64Pos & r64;
+        r64Pos <<= 1;
+        return b;
+    };
+
+    uint64_t totalSuccesses = 0;
+
+    for (uint64_t i = 0; i < Iterations; ++i) {
+        if (TryToRemoveImmediately(getCross(), getBool(), getCross(), getBool())) {
+            ++totalSuccesses;
+        }
+    }
+
+    return totalSuccesses;
+}
