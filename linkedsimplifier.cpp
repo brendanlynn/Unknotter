@@ -1,7 +1,7 @@
 #include "linkedsimplifier.h"
 
 #include <unordered_set>
-#include <map>
+#include <unordered_map>
 
 struct LinkedChord final {
     Unknotter::LinkedCross* contact_start;
@@ -255,7 +255,7 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUp
     LinkedCross* i_p;
     bool i_o;
 
-    std::map<LinkedCross*, bool> escapeDirections;
+    std::unordered_map<LinkedCross*, bool> escapeDirections;
     i_p = PrimaryStart;
     i_o = PrimaryUpper;
     while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
