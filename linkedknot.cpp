@@ -140,8 +140,9 @@ void Unknotter::LinkedCross::Remove() {
     }
 }
 
-void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper) {
-    std::unordered_set<LinkedCross*> set;
+void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper, std::unordered_set<LinkedCross*>** RemovedElements) {
+    auto* p_set = new std::unordered_set<LinkedCross*>;
+    auto& set = *p_set;
     LinkedCross*& p = Lower.r;
     bool& over = Lower.over;
     do {
@@ -151,20 +152,31 @@ void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCross* 
         element->Remove();
         delete element;
     }
+    if (RemovedElements) {
+        *RemovedElements = p_set;
+    }
+    else {
+        delete p_set;
+    }
 }
 
-void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCrossPointer Upper) {
-    RemoveRange(LinkedLength(Lower, Upper));
+void Unknotter::LinkedCross::RemoveRange(LinkedCrossPointer Lower, LinkedCrossPointer Upper, std::unordered_set<LinkedCross*>** RemovedElements) {
+    RemoveRange(LinkedLength(Lower, Upper), RemovedElements);
 }
 
-void Unknotter::LinkedCross::RemoveRange(LinkedLength Range) {
+void Unknotter::LinkedCross::RemoveRange(LinkedLength Range, std::unordered_set<LinkedCross*>** RemovedElements) {
     auto* p_set = Range.CompileLength_Set();
     const auto& set = *p_set;
     for (auto* element : set) {
         element->Remove();
         delete element;
     }
-    delete p_set;
+    if (RemovedElements) {
+        *RemovedElements = p_set;
+    }
+    else {
+        delete p_set;
+    }
 }
 
 std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Set(LinkedCross* Sample) {
