@@ -340,7 +340,7 @@ size_t Unknotter::IterateRandomRemovalAttempts(LinkedCross* Sample, std::mt19937
     std::uniform_int_distribution<size_t> dis;
     auto initCrosses = [&]() {
         crosses = LinkedCross::CompileAll_Vector(Sample);
-        dis = std::uniform_int_distribution<size_t>(0, crosses->size());
+        dis = std::uniform_int_distribution<size_t>(0, crosses->size() - 1);
     };
     auto refreshCrosses = [&]() {
         delete crosses;
