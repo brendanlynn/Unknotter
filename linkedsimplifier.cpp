@@ -357,10 +357,13 @@ size_t Unknotter::IterateRandomRemovalAttempts(LinkedCross* Sample, std::mt19937
         if (!r64Pos) {
             r64 = RNG();
             r64Pos = 1;
+            return (bool)(r64Pos & 1);
         }
-        bool b = r64Pos & r64;
-        r64Pos <<= 1;
-        return b;
+        else {
+            bool b = r64Pos & r64;
+            r64Pos <<= 1;
+            return b;
+        }
     };
 
     uint64_t totalSuccesses = 0;
