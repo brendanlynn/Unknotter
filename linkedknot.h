@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_set>
+
 namespace Unknotter {
     struct LinkedCross;
     struct LinkedCrossPointer;
@@ -45,6 +47,8 @@ namespace Unknotter {
         static LinkedCross* Add(LinkedCrossReference Upper, LinkedCrossReference Lower);
         //Removes a range of crossovers, between Lower.r and Upper, starting in the direction of Lower.over.
         static void RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper);
+        //Compiles a unordered set of all the pointers in the knot.
+        static std::unordered_set<LinkedCross*> CompileAll(LinkedCross* Sample);
     };
 }
 
