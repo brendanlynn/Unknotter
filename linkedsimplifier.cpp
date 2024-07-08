@@ -54,11 +54,17 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryU
     i_o = !i_o;
     if (SecondaryForward) {
         while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart) {
+            if (set_primary.contains(i_p)) {
+                return false;
+            }
             set_combined.insert(i_p);
         }
     }
     else {
         while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart) {
+            if (set_primary.contains(i_p)) {
+                return false;
+            }
             set_combined.insert(i_p);
         }
     }
