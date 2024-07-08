@@ -23,7 +23,8 @@ namespace Unknotter {
 }
 
 constexpr __forceinline Unknotter::AbsLength::AbsLength(size_t Index1, size_t Index2)
-    : index1(Index1), index2(Index2) { }
+    : index1(Index1),
+      index2(Index2) { }
 constexpr __forceinline bool Unknotter::AbsLength::InRange(size_t Index) const {
     if (index1 <= index2) {
         return (Index >= index1 && Index < index2);
