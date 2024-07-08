@@ -1,6 +1,7 @@
 #include "linkedsimplifier.h"
 
 #include <unordered_set>
+#include <map>
 
 struct LinkedChord final {
     Unknotter::LinkedCross* contact_start;
@@ -239,5 +240,91 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
         }
     }
 
+    return true;
+}
+
+bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryStart_Over, LinkedCross* PrimaryEnd, bool SecondaryForward) {
+    if (PrimaryStart == PrimaryEnd) {
+        return TryToRemoveImmediately(PrimaryStart, PrimaryStart_Over);
+    }
+
+    if (!CanBeRemovedImmediately(PrimaryStart, PrimaryStart_Over, PrimaryEnd, SecondaryForward)) {
+        return false;
+    }
+
+    LinkedCross* i_p;
+    bool i_o;
+
+    std::map<LinkedCross*, bool> escapeDirections;
+    i_p = PrimaryStart;
+    i_o = PrimaryStart_Over;
+    while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
+        escapeDirections.insert(std::pair<LinkedCross*, bool>(i_p, false));
+    }
+
+
+    i_p = PrimaryEnd;
+    i_o = PrimaryStart_Over;
+    {
+        bool inside = false;
+        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
+            if (escapeDirections.contains(i_p)) {
+                escapeDirections[i_p] = inside;
+            }
+        }
+    }
+    i_p = PrimaryStart;
+    i_o = PrimaryStart_Over;
+    {
+        bool inside = false;
+        while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
+            if (escapeDirections.contains(i_p)) {
+                escapeDirections[i_p] = !inside;
+            }
+        }
+    }
+
+    i_p = PrimaryStart;
+    i_o = PrimaryStart_Over;
+    LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
+    LinkedCross::RemoveRange(LinkedCrossPointer(i_p, i_o), PrimaryEnd);
+
+    i_p = PrimaryStart;
+    i_o = PrimaryStart_Over;
+    LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
+    i_o = !i_o;
+    LinkedCrossReference startRef(PrimaryStart, !PrimaryStart_Over);
+    if (SecondaryForward) {
+        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
+            bool afterParallel = escapeDirections[i_p];
+            LinkedCrossReference parallelRef(i_p, !i_o);
+            if (afterParallel) {
+                LinkedCross::Add<true, true>(startRef, parallelRef);
+            }
+            else {
+                LinkedCross::Add<true, false>(startRef, parallelRef);
+            }
+        }
+    }
+    else {
+        while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
+            bool afterParallel = escapeDirections[i_p];
+            LinkedCrossReference parallelRef(i_p, !i_o);
+            if (afterParallel) {
+                LinkedCross::Add<true, true>(startRef, parallelRef);
+            }
+            else {
+                LinkedCross::Add<true, false>(startRef, parallelRef);
+            }
+        }
+    }
+
+    return true;
+}
+bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartStartAbove) {
+    if (!CanBeRemovedImmediately(PrimaryStartEnd, PrimaryStartStartAbove)) {
+        return false;
+    }
+    LinkedCross::RemoveRange(LinkedCrossPointer(PrimaryStartEnd, PrimaryStartStartAbove), PrimaryStartEnd);
     return true;
 }
