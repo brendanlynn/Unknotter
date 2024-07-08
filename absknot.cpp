@@ -1,7 +1,6 @@
 #include "absknot.h"
 
 #include <algorithm>
-#include <set>
 #include <numeric>
 
 using Unknotter::AbsCross;
