@@ -182,6 +182,10 @@ std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Vector(
 }
 
 Unknotter::LinkedCross* Unknotter::LinkedCross::CreateKnotFromPairs(std::pair<size_t, size_t>* Pairs, size_t Pairs_Length) {
+    if (!Pairs_Length) {
+        return 0;
+    }
+    
     auto* pairs_end = Pairs + Pairs_Length;
 
     size_t crosses_length = Pairs_Length << 1;
