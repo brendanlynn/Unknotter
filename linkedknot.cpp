@@ -181,6 +181,14 @@ std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Vector(
     return p_set;
 }
 
+void Unknotter::LinkedCross::DisposeAll(LinkedCross* Sample) {
+    auto* p_vec = CompileAll_Vector(Sample);
+    auto& vec = *p_vec;
+    for (auto* i : vec) {
+        delete i;
+    }
+}
+
 Unknotter::LinkedCross* Unknotter::LinkedCross::CreateKnotFromPairs(std::pair<size_t, size_t>* Pairs, size_t Pairs_Length) {
     if (!Pairs_Length) {
         return 0;
