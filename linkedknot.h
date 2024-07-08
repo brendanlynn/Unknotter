@@ -65,11 +65,11 @@ namespace Unknotter {
         template <bool _AfterUpper, bool _AfterLower>
         static LinkedCross* Add(LinkedCrossReference Upper, LinkedCrossReference Lower);
         //Removes a range of crossovers, between Lower.r and Upper, starting in the direction of Lower.over.
-        static void RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper, std::unordered_set<LinkedCross*>** RemovedElements = 0);
+        static void RemoveRange(LinkedCrossPointer Lower, LinkedCross* Upper, std::unordered_set<LinkedCross*>* AllCrosses = 0);
         //Removes a range of crossovers, between Lower.r and Upper, starting in the direction of Lower.over.
-        static void RemoveRange(LinkedCrossPointer Lower, LinkedCrossPointer Upper, std::unordered_set<LinkedCross*>** RemovedElements = 0);
+        static void RemoveRange(LinkedCrossPointer Lower, LinkedCrossPointer Upper, std::unordered_set<LinkedCross*>* AllCrosses = 0);
         //Removes a range of crossovers, given by parameter 'Range'.
-        static void RemoveRange(LinkedLength Range, std::unordered_set<LinkedCross*>** RemovedElements = 0);
+        static void RemoveRange(LinkedLength Range, std::unordered_set<LinkedCross*>* AllCrosses = 0);
         //Compiles a unordered set of all the pointers in the knot.
         static std::unordered_set<LinkedCross*>* CompileAll_Set(LinkedCross* Sample);
         //Compiles a vector of all the pointers in the knot.
