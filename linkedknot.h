@@ -82,8 +82,8 @@ namespace Unknotter {
         static void DisposeAll(std::unordered_set<LinkedCross*>& AllCrosses);
         //Disposes of all memory taken up by a knot.
         static void DisposeAll(std::vector<LinkedCross*>& AllCrosses);
-        //Creates a knot from a number of index-index pairs, with the first value of each pair being the index crossing over, and the second being the index crossing under. The function returns a pointer to one of the crosses, indescriminately.
-        static LinkedCross* CreateKnotFromPairs(std::pair<size_t, size_t>* Pairs, size_t Pairs_Length);
+        //Creates a knot from a number of index-index pairs, with the first value of each pair being the index crossing over, and the second being the index crossing under. The function returns an array of pointers to each cross, positions correspoing to their respective position in the list.
+        static std::vector<LinkedCross*>* CreateKnotFromPairs(std::pair<size_t, size_t>* Pairs, size_t Pairs_Length);
     };
 }
 
@@ -127,7 +127,6 @@ __forceinline bool Unknotter::LinkedCrossReference::operator==(const LinkedCross
 __forceinline bool Unknotter::LinkedCrossReference::operator!=(const LinkedCrossReference& Other) {
     return &r != &Other.r || over != Other.over;
 }
-
 
 __forceinline Unknotter::LinkedLength::LinkedLength() = default;
 __forceinline Unknotter::LinkedLength::LinkedLength(LinkedCrossPointer Lower, LinkedCrossPointer Upper)

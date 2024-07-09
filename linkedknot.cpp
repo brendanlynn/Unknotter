@@ -239,7 +239,7 @@ void Unknotter::LinkedCross::DisposeAll(std::vector<LinkedCross*>& AllCrosses) {
     }
 }
 
-Unknotter::LinkedCross* Unknotter::LinkedCross::CreateKnotFromPairs(std::pair<size_t, size_t>* Pairs, size_t Pairs_Length) {
+std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CreateKnotFromPairs(std::pair<size_t, size_t>* Pairs, size_t Pairs_Length) {
     if (!Pairs_Length) {
         return 0;
     }
@@ -249,11 +249,15 @@ Unknotter::LinkedCross* Unknotter::LinkedCross::CreateKnotFromPairs(std::pair<si
     size_t crosses_length = Pairs_Length << 1;
     auto* crosses = new LinkedCrossPointer[crosses_length];
 
-    for (auto* p_i = Pairs; p_i < pairs_end; ++p_i) {
-        auto& i = *p_i;
+    auto* p_crossPtrs = new std::vector<Unknotter::LinkedCross*>(Pairs_Length);
+    auto& crossPtrs = *p_crossPtrs;
+
+    for (size_t i = 0; i < Pairs_Length; ++i) {
+        auto& e = Pairs[i];
         auto lc = new LinkedCross;
-        crosses[i.first] = LinkedCrossPointer(lc, true);
-        crosses[i.second] = LinkedCrossPointer(lc, false);
+        crosses[e.first] = LinkedCrossPointer(lc, true);
+        crosses[e.second] = LinkedCrossPointer(lc, false);
+        crossPtrs[i] = lc;
     }
 
     auto indexP1 = [&](size_t Index) {
@@ -277,9 +281,7 @@ Unknotter::LinkedCross* Unknotter::LinkedCross::CreateKnotFromPairs(std::pair<si
         lc.l_p = crosses[indexM1(i.second)];
     }
 
-    LinkedCross* p_lc = crosses[0].r;
-
     delete[] crosses;
 
-    return p_lc;
+    return p_crossPtrs;
 }
