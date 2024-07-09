@@ -291,38 +291,42 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUp
     i_p = PrimaryStart;
     i_o = PrimaryUpper;
     LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
-    LinkedCross::RemoveRange(LinkedCrossPointer(i_p, i_o), PrimaryEnd, AllCrosses);
+    if (i_p != PrimaryEnd) {
+        LinkedCross::RemoveRange(LinkedCrossPointer(i_p, i_o), PrimaryEnd, AllCrosses);
+    }
 
     i_p = PrimaryStart;
     i_o = PrimaryUpper;
     LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
     i_o = !i_o;
     LinkedCrossReference startRef(PrimaryStart, !PrimaryUpper);
-    if (SecondaryForward) {
-        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
-            bool afterParallel = escapeDirections[i_p];
-            LinkedCrossReference parallelRef(i_p, !i_o);
-            if (afterParallel) {
-                LinkedCross* lc = LinkedCross::Add<true, true>(startRef, parallelRef);
-                if (AllCrosses) AllCrosses->insert(lc);
-            }
-            else {
-                LinkedCross* lc = LinkedCross::Add<true, false>(startRef, parallelRef);
-                if (AllCrosses) AllCrosses->insert(lc);
+    if (i_p != PrimaryEnd) {
+        if (SecondaryForward) {
+            while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
+                bool afterParallel = escapeDirections[i_p];
+                LinkedCrossReference parallelRef(i_p, !i_o);
+                if (afterParallel) {
+                    LinkedCross* lc = LinkedCross::Add<true, true>(startRef, parallelRef);
+                    if (AllCrosses) AllCrosses->insert(lc);
+                }
+                else {
+                    LinkedCross* lc = LinkedCross::Add<true, false>(startRef, parallelRef);
+                    if (AllCrosses) AllCrosses->insert(lc);
+                }
             }
         }
-    }
-    else {
-        while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
-            bool afterParallel = escapeDirections[i_p];
-            LinkedCrossReference parallelRef(i_p, !i_o);
-            if (afterParallel) {
-                LinkedCross* lc = LinkedCross::Add<true, true>(startRef, parallelRef);
-                if (AllCrosses) AllCrosses->insert(lc);
-            }
-            else {
-                LinkedCross* lc = LinkedCross::Add<true, false>(startRef, parallelRef);
-                if (AllCrosses) AllCrosses->insert(lc);
+        else {
+            while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryEnd) {
+                bool afterParallel = escapeDirections[i_p];
+                LinkedCrossReference parallelRef(i_p, !i_o);
+                if (afterParallel) {
+                    LinkedCross* lc = LinkedCross::Add<true, true>(startRef, parallelRef);
+                    if (AllCrosses) AllCrosses->insert(lc);
+                }
+                else {
+                    LinkedCross* lc = LinkedCross::Add<true, false>(startRef, parallelRef);
+                    if (AllCrosses) AllCrosses->insert(lc);
+                }
             }
         }
     }
