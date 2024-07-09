@@ -205,24 +205,36 @@ std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_
 
 std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Vector(LinkedCross* Sample) {
     auto* p_set = CompileAll_Set(Sample);
-    auto& set = *p_set;
+    auto* p_vec = CompileAll_Vector(*p_set);
+    delete p_set;
+    return p_vec;
+}
 
+std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedCross::CompileAll_Vector(std::unordered_set<LinkedCross*>& AllCrosses) {
     auto* p_vec = new std::vector<LinkedCross*>;
     auto& vec = *p_vec;
 
-    for (auto& e : set) {
+    for (auto& e : AllCrosses) {
         vec.push_back(e);
     }
-
-    delete p_set;
 
     return p_vec;
 }
 
 void Unknotter::LinkedCross::DisposeAll(LinkedCross* Sample) {
     auto* p_vec = CompileAll_Vector(Sample);
-    auto& vec = *p_vec;
-    for (auto* i : vec) {
+    DisposeAll(*p_vec);
+    delete p_vec;
+}
+
+void Unknotter::LinkedCross::DisposeAll(std::unordered_set<LinkedCross*>& AllCrosses) {
+    auto* p_vec = CompileAll_Vector(AllCrosses);
+    DisposeAll(*p_vec);
+    delete p_vec;
+}
+
+void Unknotter::LinkedCross::DisposeAll(std::vector<LinkedCross*>& AllCrosses) {
+    for (auto* i : AllCrosses) {
         delete i;
     }
 }
