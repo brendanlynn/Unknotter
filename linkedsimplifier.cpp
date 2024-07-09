@@ -249,9 +249,9 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStartEnd, bool Prima
     return true;
 }
 
-bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUpper, LinkedCross* PrimaryEnd, bool SecondaryForward) {
+bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUpper, LinkedCross* PrimaryEnd, bool SecondaryForward, std::unordered_set<LinkedCross*>* AllCrosses) {
     if (PrimaryStart == PrimaryEnd) {
-        return TryToRemoveImmediately(PrimaryStart, PrimaryUpper);
+        return TryToRemoveImmediately(PrimaryStart, PrimaryUpper, AllCrosses);
     }
 
     if (!CanBeRemovedImmediately(PrimaryStart, PrimaryUpper, PrimaryEnd, SecondaryForward)) {
@@ -293,7 +293,7 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUp
     i_p = PrimaryStart;
     i_o = PrimaryUpper;
     LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
-    LinkedCross::RemoveRange(LinkedCrossPointer(i_p, i_o), PrimaryEnd);
+    LinkedCross::RemoveRange(LinkedCrossPointer(i_p, i_o), PrimaryEnd, AllCrosses);
 
     i_p = PrimaryStart;
     i_o = PrimaryUpper;
@@ -305,10 +305,12 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUp
             bool afterParallel = escapeDirections[i_p];
             LinkedCrossReference parallelRef(i_p, !i_o);
             if (afterParallel) {
-                LinkedCross::Add<true, true>(startRef, parallelRef);
+                LinkedCross* lc = LinkedCross::Add<true, true>(startRef, parallelRef);
+                if (AllCrosses) AllCrosses->insert(lc);
             }
             else {
-                LinkedCross::Add<true, false>(startRef, parallelRef);
+                LinkedCross* lc = LinkedCross::Add<true, false>(startRef, parallelRef);
+                if (AllCrosses) AllCrosses->insert(lc);
             }
         }
     }
@@ -317,21 +319,23 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUp
             bool afterParallel = escapeDirections[i_p];
             LinkedCrossReference parallelRef(i_p, !i_o);
             if (afterParallel) {
-                LinkedCross::Add<true, true>(startRef, parallelRef);
+                LinkedCross* lc = LinkedCross::Add<true, true>(startRef, parallelRef);
+                if (AllCrosses) AllCrosses->insert(lc);
             }
             else {
-                LinkedCross::Add<true, false>(startRef, parallelRef);
+                LinkedCross* lc = LinkedCross::Add<true, false>(startRef, parallelRef);
+                if (AllCrosses) AllCrosses->insert(lc);
             }
         }
     }
 
     return true;
 }
-bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartUpper) {
+bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartUpper, std::unordered_set<LinkedCross*>* AllCrosses) {
     if (!CanBeRemovedImmediately(PrimaryStartEnd, PrimaryStartUpper)) {
         return false;
     }
-    LinkedCross::RemoveRange(LinkedCrossPointer(PrimaryStartEnd, PrimaryStartUpper), PrimaryStartEnd);
+    LinkedCross::RemoveRange(LinkedCrossPointer(PrimaryStartEnd, PrimaryStartUpper), PrimaryStartEnd, AllCrosses);
     return true;
 }
 
