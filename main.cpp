@@ -75,7 +75,7 @@ ContinueOuter:
         cout << "\nThe following notation was recieved:\n\n";
         if (pairs.size()) {
             for (const auto& pair : pairs) {
-                cout << i << ": (" << pair.first << ", " << pair.second << ")\n";
+                cout << i++ << ": (" << pair.first << ", " << pair.second << ")\n";
             }
         }
         else {
