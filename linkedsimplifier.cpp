@@ -345,6 +345,18 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStart, bool PrimaryUp
         }
     }
 
+    PrimaryStart->Remove();
+    PrimaryEnd->Remove();
+
+    if (AllCrosses) {
+        auto& refAllCrosses = *AllCrosses;
+        refAllCrosses.erase(PrimaryStart);
+        refAllCrosses.erase(PrimaryEnd);
+    }
+
+    delete PrimaryStart;
+    delete PrimaryEnd;
+
     return true;
 }
 bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartUpper, std::unordered_set<LinkedCross*>* AllCrosses) {
