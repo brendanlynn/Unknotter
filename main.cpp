@@ -17,6 +17,7 @@ using std::string;
 using std::getline;
 using std::istringstream;
 using std::unordered_set;
+using std::numeric_limits;
 
 using Unknotter::LinkedCross;
 using Unknotter::TryToRemoveImmediately;
@@ -71,6 +72,28 @@ ContinueOuter:
                 goto ContinueOuter;
             }
         } while (++i, true);
+
+        size_t doubleSize = pairs.size() << 1;
+        unordered_set<size_t> indicies;
+        for (const auto& pair : pairs) {
+            if (pair.first >= doubleSize) {
+                cout << "\nIndex " << pair.first << " is greater than or equal to the quantity of indicies. This is an impossibility. The list is therefore invalid.\n";
+                goto ContinueOuter;
+            }
+            if (pair.second >= doubleSize) {
+                cout << "\nIndex " << pair.second << " is greater than or equal to the quantity of indicies. This is an impossibility. The list is therefore invalid.\n";
+                goto ContinueOuter;
+            }
+            if (!indicies.insert(pair.first).second) {
+                cout << "\nIndex " << pair.first << " is present more than once in the pairings. This is an impossibility. The list is therefore invalid.\n";
+                goto ContinueOuter;
+            }
+            if (!indicies.insert(pair.second).second) {
+                cout << "\nIndex " << pair.second << " is present more than once in the pairings. This is an impossiblity. The list is therefore invalid.\n";
+                goto ContinueOuter;
+            }
+        }
+
         i = 1;
         cout << "\nThe following notation was recieved:\n\n";
         if (pairs.size()) {
