@@ -84,12 +84,13 @@ ContinueOuter:
 
         cout << "\nPlease verify this notation before continuing. Computation may take time.\n";
         cout << "Is this notation correct? (y/n): ";
-        char correct;
-        if (!(cin >> correct) || (correct != 'y' && correct != 'n')) {
+        string correct;
+        getline(cin, correct);
+        if (correct != "y" && correct != "n") {
             cout << "Invalid format.\n";
             continue;
         }
-        if (correct == 'n') {
+        if (correct == "n") {
             cout << "Please re-enter notation.\n";
             continue;
         }
