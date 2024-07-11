@@ -46,7 +46,7 @@ int main() {
     cout << "2: 4 1\n";
     cout << "3: 2 5\n";
     cout << "4: end\n\n";
-    cout << "I hope this is, or will someday become, a useful tool. Have fun!\n";
+    cout << "I hope this tool is made good use of. Have fun!\n";
 ContinueOuter:
     while (true) {
         cout << "--------------------------------\n";
