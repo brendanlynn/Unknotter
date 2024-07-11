@@ -2,18 +2,28 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <vector>
 #include "linkedknot.h"
 #include "linkedsimplifier.h"
 
 using std::cout;
+using std::cin;
 using std::getchar;
 using std::mt19937_64;
 using std::stringstream;
+using std::pair;
+using std::vector;
+using std::string;
+using std::getline;
+using std::istringstream;
+using std::unordered_set;
 
 using Unknotter::LinkedCross;
 using Unknotter::TryToRemoveImmediately;
 using Unknotter::CanBeRemovedImmediately;
-using Unknotter::IterateRandomRemovalAttempts;
+using Unknotter::IterateRemovalAttempts;
+
+using iPair_t = pair<size_t, size_t>;
 
 #define CreateKnotFromPairs LinkedCross::CreateKnotFromPairs
 #define KnotAdd LinkedCross::Add
@@ -28,32 +38,70 @@ uint64_t getMills() {
 }
 
 int main() {
-    constexpr size_t pairsLength = 3;
-    std::pair<size_t, size_t> pairs[pairsLength] = {
-        { 3, 0 },
-        { 4, 1 },
-        { 2, 5 }
-    };
-
+    cout << "Welcome to Unknotter!\n";
+    cout << "by Brendan Lynn.\n\n";
+    cout << "This program was designed by computer scientist Brendan Lynn as a algorithm to detect whether or not a given mathematical knot is the unknot. Bear in mind that this algorithm is of an evidence-supported but nonetheless unproven hypothesis.\n\n";
+    cout << "Knots must be specified in a base-0, absolute, paired version of Dowker-Thistlethwaite notation, with the index crossing over on the left and the index crossing under on the right. To indicate the end of the set, type \"end\", case-sensitive, exactally like that. For instance, the trefoil knot could be notated as such:\n\n";
+    cout << "1: 0 3\n";
+    cout << "2: 4 1\n";
+    cout << "3: 2 5\n";
+    cout << "4: end\n\n";
+    cout << "I hope this is, or will someday become, a useful tool. Have fun!\n";
+ContinueOuter:
     while (true) {
-        auto* p_startCrosses = CreateKnotFromPairs(pairs, pairsLength);
-        auto& startCrosses = *p_startCrosses;
-        auto* p_allCrosses = new std::unordered_set<LinkedCross*>(startCrosses.data(), startCrosses.data() + startCrosses.size());
-        auto& allCrosses = *p_allCrosses;
+        cout << "--------------------------------\n";
+        cout << "Please enter knot notation:\n\n";
+        size_t i = 1;
+        vector<iPair_t> pairs;
+        do {
+            cout << i << ": ";
 
-        size_t sSize = allCrosses.size();
-        auto t1 = std::chrono::high_resolution_clock::now();
+            string dv;
+            getline(cin, dv);
+            if (dv == "end") break;
+
+            size_t a;
+            size_t b;
+            istringstream iss(dv);
+            if (iss >> a >> b && iss.eof()) {
+                pairs.push_back(iPair_t(a, b));
+            }
+            else {
+                cout << "\nInvalid format.\n";
+                goto ContinueOuter;
+            }
+        } while (++i, true);
+        i = 1;
+        cout << "\nThe following notation was recieved:\n\n";
+        for (const auto& pair : pairs) {
+            cout << i << ": (" << pair.first << ", " << pair.second << ")\n";
+        }
+
+        cout << "\nPlease verify this notation before continuing. Computation may take time.\n";
+        cout << "Is this notation correct? (y/n): ";
+        char correct;
+        if (!(cin >> correct) || (correct != 'y' && correct != 'n')) {
+            cout << "Invalid format.\n";
+            continue;
+        }
+        if (correct == 'n') {
+            cout << "Please re-enter notation.\n";
+            continue;
+        }
+
+        cout << "\nProceeding with computation...";
+        const auto* p_startCrosses = CreateKnotFromPairs(pairs.data(), pairs.size());
+        const auto& startCrosses = *p_startCrosses;
+        unordered_set<LinkedCross*> allCrosses(startCrosses.begin(), startCrosses.end());
         IterateRemovalAttempts(allCrosses);
-        auto t2 = std::chrono::high_resolution_clock::now();
-        size_t eSize = allCrosses.size();
-        std::stringstream ss;
-        ss << "Starting crossover count: " << sSize << "; time taken:" << std::setw(9) << (t2 - t1) << "; ending crossover count: " << eSize << ".\n";
-        cout << ss.str();
+        if (allCrosses.size()) {
+            cout << "\n\nTHE RESULT: Is the knot the unknot?: ->\033[31mNO\033[0m<-\n";
+            LinkedCross::DisposeAll(allCrosses);
+        }
+        else {
+            cout << "\n\nTHE RESULT: Is the knot the unknot?: ->\033[32mYES\033[0m<-\n";
+        }
 
-        LinkedCross::DisposeAll(allCrosses);
         delete p_startCrosses;
-        delete p_allCrosses;
-
-        std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::milliseconds(250));
     }
 }
