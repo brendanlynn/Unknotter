@@ -38,8 +38,8 @@ uint64_t getMills() {
 }
 
 int main() {
-    cout << "Welcome to Unknotter!\n";
-    cout << "by Brendan Lynn.\n\n";
+    cout << "Welcome to \033[33mUnknotter\033[0m!\n";
+    cout << "by \033[32mBrendan Lynn\033[0m.\n\n";
     cout << "This program was designed by computer scientist Brendan Lynn as a algorithm to detect whether or not a given mathematical knot is the unknot. Bear in mind that this algorithm is of an evidence-supported but nonetheless unproven hypothesis.\n\n";
     cout << "Knots must be specified in a base-0, absolute, paired version of Dowker-Thistlethwaite notation, with the index crossing over on the left and the index crossing under on the right. To indicate the end of the set, type \"end\", case-sensitive, exactally like that. For instance, the trefoil knot could be notated as such:\n\n";
     cout << "1: 0 3\n";
