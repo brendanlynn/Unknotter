@@ -58,12 +58,14 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryU
             if (set_combined.insert(i_p).second) continue;
             return false;
         }
+        if (i_o == PrimaryUpper) return false;
     }
     else {
         while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart) {
             if (set_combined.insert(i_p).second) continue;
             return false;
         }
+        if (i_o == PrimaryUpper) return false;
     }
 
     //gets chords of the area
@@ -76,7 +78,13 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryU
         bool lastOver;
         bool lastPrimary;
         LinkedCross* lastContactPoint = 0;
-        while (LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
+        while (true) {
+            LinkedCross::TravelN(*(const LinkedCross**)&i_p, i_o);
+            if (i_p == PrimaryStart || i_p == PrimaryEnd) {
+                if (inside) return false;
+                else break;
+            }
+
             if (set_combined.contains(i_p)) {
                 bool over = i_o;
                 bool primary = set_primary.contains(i_p);
@@ -105,7 +113,13 @@ bool Unknotter::CanBeRemovedImmediately(LinkedCross* PrimaryStart, bool PrimaryU
         bool lastOver;
         bool lastPrimary;
         LinkedCross* lastContactPoint = 0;
-        while (LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o), i_p != PrimaryStart && i_p != PrimaryEnd) {
+        while (true) {
+            LinkedCross::TravelP(*(const LinkedCross**)&i_p, i_o);
+            if (i_p == PrimaryStart || i_p == PrimaryEnd) {
+                if (inside) return false;
+                else break;
+            }
+
             if (set_combined.contains(i_p)) {
                 bool over = i_o;
                 bool primary = set_primary.contains(i_p);
