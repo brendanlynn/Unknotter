@@ -145,7 +145,7 @@ __forceinline std::vector<Unknotter::LinkedCrossPointer>* Unknotter::LinkedLengt
 
     LinkedCrossPointer lcp = lower;
     do vec.push_back(lcp);
-    while (LinkedCross::TravelN(*(const LinkedCross**)&lcp.r, lcp.over), lcp != upper);
+    while (LinkedCross::TravelN(lcp.r, lcp.over), lcp != upper);
     return p_vec;
 }
 __forceinline std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedLength::CompileLength_Set() const {
@@ -154,7 +154,7 @@ __forceinline std::unordered_set<Unknotter::LinkedCross*>* Unknotter::LinkedLeng
 
     LinkedCrossPointer lcp = lower;
     do set.insert(lcp.r);
-    while (LinkedCross::TravelN(*(const LinkedCross**)&lcp.r, lcp.over), lcp != upper);
+    while (LinkedCross::TravelN(lcp.r, lcp.over), lcp != upper);
     return p_set;
 }
 __forceinline std::vector<Unknotter::LinkedCross*>* Unknotter::LinkedLength::CompileLength_Vec() const {
