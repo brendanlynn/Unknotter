@@ -8,6 +8,7 @@
 using std::cout;
 using std::getchar;
 using std::mt19937_64;
+using std::stringstream;
 
 using Unknotter::LinkedCross;
 using Unknotter::TryToRemoveImmediately;
@@ -37,16 +38,22 @@ int main() {
     };
 
     while (true) {
-        auto* p_allCrosses = KnotGetSet(CreateKnotFromPairs(pairs, pairsLength));
+        auto* p_startCrosses = CreateKnotFromPairs(pairs, pairsLength);
+        auto& startCrosses = *p_startCrosses;
+        auto* p_allCrosses = new std::unordered_set<LinkedCross*>(startCrosses.data(), startCrosses.data() + startCrosses.size());
         auto& allCrosses = *p_allCrosses;
 
-        cout << IterateRandomRemovalAttempts(allCrosses, mt, 1000) << "\n";
+        size_t sSize = allCrosses.size();
+        uint64_t successfulRemovals = IterateRandomRemovalAttempts(allCrosses, mt, 1000);
+        size_t eSize = allCrosses.size();
+        std::stringstream ss;
+        ss << "Starting crossover count: " << sSize << "; successful removals: " << successfulRemovals << "; ending crossover count: " << eSize << ".\n";
+        cout << ss.str();
 
         LinkedCross::DisposeAll(allCrosses);
+        delete p_startCrosses;
         delete p_allCrosses;
 
         std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::milliseconds(250));
     }
-
-    getchar();
 }
