@@ -406,3 +406,24 @@ size_t Unknotter::IterateRandomRemovalAttempts(std::unordered_set<LinkedCross*>&
 
     return totalSuccesses;
 }
+
+void Unknotter::IterateRemovalAttempts(std::unordered_set<LinkedCross*>& AllCrosses) {
+ContinueWhile:
+    while (AllCrosses.size()) {
+        LinkedCrossPointer lp(*AllCrosses.begin(), false);
+        LinkedCrossPointer i = lp;
+        do {
+            LinkedCrossPointer j = lp;
+            do {
+                bool k = false;
+                do {
+                    bool l = false;
+                    do {
+                        if (TryToRemoveImmediately(i.r, k, j.r, l, &AllCrosses)) goto ContinueWhile;
+                    } while (l = !l, l);
+                } while (k = !k, k);
+            } while (LinkedCross::TravelN(j.r, j.over), j != lp);
+        } while (LinkedCross::TravelN(i.r, i.over), i != lp);
+        break;
+    }
+}

@@ -11,4 +11,6 @@ namespace Unknotter {
     bool TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool PrimaryStartUpper, std::unordered_set<LinkedCross*>* AllCrosses = 0);
 
     size_t IterateRandomRemovalAttempts(std::unordered_set<LinkedCross*>& AllCrosses, std::mt19937_64& RNG, uint64_t Iterations);
+
+    void IterateRemovalAttempts(std::unordered_set<LinkedCross*>& AllCrosses);
 }
