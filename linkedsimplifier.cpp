@@ -355,49 +355,6 @@ bool Unknotter::TryToRemoveImmediately(LinkedCross* PrimaryStartEnd, bool Primar
     return true;
 }
 
-size_t Unknotter::IterateRandomRemovalAttempts(LinkedCross* Sample, std::mt19937_64& RNG, uint64_t Iterations) {
-    std::unordered_set<LinkedCross*>* crosses_set = LinkedCross::CompileAll_Set(Sample);
-    std::vector<LinkedCross*> crosses_vec;
-    std::uniform_int_distribution<size_t> dis;
-    auto refreshInfo = [&]() {
-        crosses_vec.clear();
-        for (LinkedCross* element : *crosses_set) crosses_vec.push_back(element);
-        dis = std::uniform_int_distribution<size_t>(0, crosses_vec.size() - 1);
-    };
-    auto getCross = [&]() {
-        return crosses_vec[dis(RNG)];
-    };
-    refreshInfo();
-
-    uint64_t r64;
-    uint32_t r64Pos = 0;
-    auto getBool = [&]() {
-        if (!r64Pos) {
-            r64 = RNG();
-            r64Pos = 1;
-            return (bool)(r64Pos & 1);
-        }
-        else {
-            bool b = r64Pos & r64;
-            r64Pos <<= 1;
-            return b;
-        }
-    };
-
-    uint64_t totalSuccesses = 0;
-    for (uint64_t i = 0; i < Iterations; ++i) {
-        if (TryToRemoveImmediately(getCross(), getBool(), getCross(), getBool(), crosses_set)) {
-            ++totalSuccesses;
-            if (!crosses_set->size()) break;
-            refreshInfo();
-        }
-    }
-
-    delete crosses_set;
-
-    return totalSuccesses;
-}
-
 size_t Unknotter::IterateRandomRemovalAttempts(std::unordered_set<LinkedCross*>& AllCrosses, std::mt19937_64& RNG, uint64_t Iterations) {
     std::vector<LinkedCross*> crosses_vec;
     std::uniform_int_distribution<size_t> dis;
