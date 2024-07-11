@@ -73,8 +73,13 @@ ContinueOuter:
         } while (++i, true);
         i = 1;
         cout << "\nThe following notation was recieved:\n\n";
-        for (const auto& pair : pairs) {
-            cout << i << ": (" << pair.first << ", " << pair.second << ")\n";
+        if (pairs.size()) {
+            for (const auto& pair : pairs) {
+                cout << i << ": (" << pair.first << ", " << pair.second << ")\n";
+            }
+        }
+        else {
+            cout << "No data.\n";
         }
 
         cout << "\nPlease verify this notation before continuing. Computation may take time.\n";
@@ -90,18 +95,26 @@ ContinueOuter:
         }
 
         cout << "\nProceeding with computation...";
-        const auto* p_startCrosses = CreateKnotFromPairs(pairs.data(), pairs.size());
-        const auto& startCrosses = *p_startCrosses;
-        unordered_set<LinkedCross*> allCrosses(startCrosses.begin(), startCrosses.end());
-        IterateRemovalAttempts(allCrosses);
-        if (allCrosses.size()) {
-            cout << "\n\nTHE RESULT: Is the knot the unknot?: ->\033[31mNO\033[0m<-\n";
+        bool notUnknot;
+        if (pairs.size()) {
+            const auto* p_startCrosses = CreateKnotFromPairs(pairs.data(), pairs.size());
+            const auto& startCrosses = *p_startCrosses;
+            unordered_set<LinkedCross*> allCrosses(startCrosses.begin(), startCrosses.size() ? startCrosses.end() : startCrosses.begin());
+            IterateRemovalAttempts(allCrosses);
+
+            notUnknot = (bool)allCrosses.size();
+
             LinkedCross::DisposeAll(allCrosses);
+            delete p_startCrosses;
+        }
+        else {
+            notUnknot = false;
+        }
+        if (notUnknot) {
+            cout << "\n\nTHE RESULT: Is the knot the unknot?: ->\033[31mNO\033[0m<-\n";
         }
         else {
             cout << "\n\nTHE RESULT: Is the knot the unknot?: ->\033[32mYES\033[0m<-\n";
         }
-
-        delete p_startCrosses;
     }
 }
