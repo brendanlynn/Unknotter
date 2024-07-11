@@ -59,6 +59,10 @@ namespace Unknotter {
         static __forceinline void TravelN(const LinkedCross*& Current, bool& Over);
         //Travels to the previous node, aligned to the direction given by Over. To turn, not Over.
         static __forceinline void TravelP(const LinkedCross*& Current, bool& Over);
+        //Travels to the next node, aligned to the direction given by Over. To turn, not Over.
+        static __forceinline void TravelN(LinkedCross*& Current, bool& Over);
+        //Travels to the previous node, aligned to the direction given by Over. To turn, not Over.
+        static __forceinline void TravelP(LinkedCross*& Current, bool& Over);
         //Connects the string behind two nodes, Upper crossing over Lower.
         static LinkedCross* Add(LinkedCrossReference Upper, LinkedCrossReference Lower);
         //Connects the string after/behind two nodes, Upper crossing over Lower.
@@ -188,4 +192,10 @@ __forceinline void Unknotter::LinkedCross::TravelP(const LinkedCross*& Current, 
     else {
         GoToRef(Current, Over, Current->l_p);
     }
+}
+__forceinline void Unknotter::LinkedCross::TravelN(LinkedCross*& Current, bool& Over) {
+    TravelN(const_cast<const LinkedCross*&>(Current), Over);
+}
+__forceinline void Unknotter::LinkedCross::TravelP(LinkedCross*& Current, bool& Over) {
+    TravelP(const_cast<const LinkedCross*&>(Current), Over);
 }
