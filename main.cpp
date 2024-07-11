@@ -44,10 +44,12 @@ int main() {
         auto& allCrosses = *p_allCrosses;
 
         size_t sSize = allCrosses.size();
-        uint64_t successfulRemovals = IterateRandomRemovalAttempts(allCrosses, mt, 1000);
+        auto t1 = std::chrono::high_resolution_clock::now();
+        IterateRemovalAttempts(allCrosses);
+        auto t2 = std::chrono::high_resolution_clock::now();
         size_t eSize = allCrosses.size();
         std::stringstream ss;
-        ss << "Starting crossover count: " << sSize << "; successful removals: " << successfulRemovals << "; ending crossover count: " << eSize << ".\n";
+        ss << "Starting crossover count: " << sSize << "; time taken:" << std::setw(9) << (t2 - t1) << "; ending crossover count: " << eSize << ".\n";
         cout << ss.str();
 
         LinkedCross::DisposeAll(allCrosses);
