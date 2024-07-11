@@ -28,8 +28,6 @@ uint64_t getMills() {
 }
 
 int main() {
-    mt19937_64 mt(getMills());
-
     constexpr size_t pairsLength = 3;
     std::pair<size_t, size_t> pairs[pairsLength] = {
         { 3, 0 },
