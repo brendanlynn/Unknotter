@@ -129,18 +129,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="absknot.cpp" />
-    <ClCompile Include="abssimplifier.cpp" />
     <ClCompile Include="linkedknot.cpp" />
     <ClCompile Include="linkedsimplifier.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="abscircle.h" />
-    <ClInclude Include="absknot.h" />
-    <ClInclude Include="abslength.h" />
-    <ClInclude Include="absshift.h" />
-    <ClInclude Include="abssimplifier.h" />
     <ClInclude Include="linkedknot.h" />
     <ClInclude Include="linkedsimplifier.h" />
   </ItemGroup>

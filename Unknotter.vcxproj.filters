@@ -18,12 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="absknot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="abssimplifier.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="linkedknot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,21 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="linkedknot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="absknot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="abssimplifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="abslength.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="abscircle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="absshift.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="linkedsimplifier.h">
