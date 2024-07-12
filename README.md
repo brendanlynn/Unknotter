@@ -36,4 +36,4 @@ In the worst case, my algorithm iterates through every pair of crossovers an amo
 
 ## Preformatted Knot Examples
 
-Preformatted knot examples can be found in the Wiki, [here](https://github.com/brendanlynn/Unknotter/wiki/Preformatted-Knot-Examples).
+Preformatted knot examples can be found in the companion repository, [Unknotter: Preformatted Knots](https://github.com/brendanlynn/Unknotter_PreformattedKnots/).
