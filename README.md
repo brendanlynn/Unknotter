@@ -1,6 +1,9 @@
 # Unknotter
 This program was designed by computer scientist Brendan Lynn as an algorithm to solve the [Unknotting problem](https://en.wikipedia.org/wiki/Unknotting_problem): determining whether or not a given mathematical knot is the unknot. Bear in mind that this algorithm is based on an evidence-supported but nonetheless unproven hypothesis.
 
+> [!IMPORTANT]\
+> Due to unexpected complications in the implementation of the algorithm this repository is based on, a new algorithm had been hypothesised. This new algorithm is being developed in [Unknotter2](https://github.com/brendanlynn/Unknotter2/). Thus, this repository and its compagnion, [Unknotter: Preformatted Knots](https://github.com/brendanlynn/Unknotter_PreformattedKnots), have been archived.
+
 ## Usage
 Knots must be specified in a base-0, absolute, paired version of Dowker-Thistlethwaite notation, with the index crossing over on the left and the index crossing under on the right. For instance, the trefoil knot could be notated as $`(0, 3), (4, 1), (2, 5)`$.
 
